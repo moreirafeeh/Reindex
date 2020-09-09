@@ -51,25 +51,27 @@ public class DocumentumRunner {
 		
 		/// limpa os arquivos com parametros zerados ==
 		
-		String nameinvalid = "000000000000000_00000000000000000_0000000_00000000000000";
-		Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/Lucas Vidotti/ParametrosIncorretos",nameinvalid));
-		Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/Sinistros Autos/Não Indexados",nameinvalid));
+		
 		
 		///--------------------------------------------------------------------
 		
 		/// joga o object_name dos arquivos no array=== 
 		ArrayList<String> arquivosNaoIndexados;
-		arquivosNaoIndexados = Utils.ConsultarQuery(Querys.PastaParaArquivo("/Sinistros Autos/Não Indexados"));
+		arquivosNaoIndexados = Utils.SrcClear(Querys.PastaParaArquivo("/Sinistros Autos/Não Indexados"));
 		///--------------------------------------------------------------------
 		
 		/// consultando web service ==
 		for(String params: arquivosNaoIndexados){
+
+		
+
 			
 //			String param1=params.substring(4,19);
 //			String param2=params.substring(20,37); 
 //			String paramBoard = params.substring(38,45);
 //			String param4 =  params.substring(46,60);
 			
+
 			
 //			/// chamada do web service == 
 //			QName SERVICE_NAME = new QName("http://tempuri.org/", "Calculator");
@@ -144,8 +146,8 @@ public class DocumentumRunner {
 			
 			// movimentacao do felipe == true -----
 			
-			Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_ID("/Sinistros Autos/Não Indexados",nameinvalid));
-			Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK_ID("/Lucas Vidotti/ParametrosIncorretos",nameinvalid));
+			Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_ID("/Sinistros Autos/Não Indexados",params));
+			Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK_ID("/Lucas Vidotti/ParametrosIncorretos",params));
 			
 			
 			//-----------------------------

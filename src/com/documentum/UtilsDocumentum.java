@@ -1,6 +1,10 @@
  package com.documentum;
 import java.io.IOException;
+
 import java.util.ArrayList;
+
+import org.apache.commons.io.FilenameUtils;
+
 import com.documentum.ObjectsParam.Querys;
 
 import com.documentum.conexao_documentum;
@@ -30,6 +34,9 @@ import com.documentum.fc.common.IDfId;
 import com.documentum.fc.common.IDfList;
 import com.documentum.operations.IDfExportNode;
 import com.documentum.operations.IDfExportOperation;
+
+import org.apache.commons.io.FilenameUtils;
+
 
 public class UtilsDocumentum extends conexao_documentum {
 	
@@ -211,6 +218,84 @@ public class UtilsDocumentum extends conexao_documentum {
 			 
 			
 			}
+		
+		//-------------------------------------------------------------------------
+		
+		public ArrayList<String> SrcClear(String queryString) throws Exception {
+
+			System.out.println(getRepositorioDctm());
+			System.out.println(getSessDctm());
+			System.out.println(getUsuarioDctm());
+
+			ArrayList<String> arquivo = new ArrayList<String>();
+
+			IDfQuery query = new DfQuery();
+
+			query.setDQL(queryString);
+
+			IDfCollection coll = query.execute(getSessDctm(), 0);
+
+			int cont =0;
+			while (coll.next()) {
+
+				IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
+
+				String objectNameFile = typeObject.getString("resultado_query");
+
+				// tirar extenção do aquivo
+
+				String[] params = objectNameFile.split("_");
+				
+				for (String param : params) {
+
+					param = FilenameUtils.removeExtension(param);
+					// valida sinistro ==
+					if (param.matches("[0-9]*") && param.length() >= 13) {
+						if (Double.parseDouble(param) > 0 ) {
+							arquivo.add(objectNameFile);
+							break;
+						}
+					}
+					// valida protocolo ==
+					if (param.length() == 17 && Character.toString(param.charAt(14)).matches("[A-Z]*")) {
+						arquivo.add(objectNameFile);
+						break;
+					}
+						
+					// valida placa ==
+					 if (param.length() == 7 && param.substring(0, 3).matches("[A-Z]*")) {
+						 arquivo.add(objectNameFile);
+						 break;
+					}
+					// valida expediente ==
+					 if (param.length() == 5 && param.substring(0, 3).matches("[A-Z]*")) {
+							 arquivo.add(objectNameFile);
+							  break;
+						}
+				
+					}
+				
+				
+				/// se não for add no array ele eh expurgado ==
+				if(objectNameFile.equals("")){
+					System.out.println("vazio");
+				}
+					
+//					if(arquivo.get(arquivo.size()) != objectNameFile || objectNameFile.equals("")){
+//						ConsultarQueryUPDATE(Querys.UPDATE_LINK("/Lucas Vidotti/ParametrosIncorretos",objectNameFile));
+//						ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/Sinistros Autos/Não Indexados",objectNameFile));
+//					}
+				}
+
+			
+
+			if (coll != null)
+
+				coll.close();
+
+			return arquivo;
+
+		}
 		
 		
 }
