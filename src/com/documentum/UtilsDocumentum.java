@@ -1,4 +1,4 @@
-package com.documentum;
+ package com.documentum;
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -112,44 +112,99 @@ public class UtilsDocumentum extends conexao_documentum {
 		
 	}
 	
-		//-------------------CONSULTAS DQL--------------------
-		public ArrayList<String> ConsultarQuery(String queryString) throws Exception {
-			
-			System.out.println(getRepositorioDctm());
-			System.out.println(getSessDctm());
-			System.out.println(getUsuarioDctm());
-			
-			ArrayList<String> arquivo = new ArrayList<String>();
-			
-			IDfQuery query = new DfQuery();
-			
-			query.setDQL(queryString);
-			
-			IDfCollection coll = query.execute(getSessDctm(), 0);
-			
-			while (coll.next()) {
-			
-				IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();	
-				
-				System.out.println("----------------------------------------------------");
-			    System.out.println("resultado: "+ typeObject.getString("resultado_query"));
-			    //System.out.println("creation date "+ typeObject.getString("r_object_id"));
-			    System.out.println("----------------------------------------------------");
-			    
-			    arquivo.add(typeObject.getString("resultado_query"));
-			}
-			
-			if (coll != null)
-			
-				coll.close();
-			
-			return arquivo; 
-			
-			}
-		//------------------------------------------------------
+	public IDfDocument createObject(String Nome_doc,String doc_type, String tipo_conteudo, String path_conteudo, String documentum_path) throws Exception {
 		
-		//UPDATE QUERYS----
-		public void ConsultarQueryUPDATE(String queryString) throws Exception {
+		IDfDocument document = (IDfDocument) getSessDctm().newObject(doc_type);
+		
+		if (document != null) {
+		
+			document.setObjectName(Nome_doc);
+		
+		    document.setContentType(tipo_conteudo);
+		
+		    document.link(documentum_path);
+		
+		    document.save();
+		
+		    }	
+		
+		return document;
+		
+	}
+	
+	//-------------------CONSULTAS DQL--------------------
+	public ArrayList<String> ConsultarQuery(String queryString) throws Exception {
+		
+		System.out.println(getRepositorioDctm());
+		System.out.println(getSessDctm());
+		System.out.println(getUsuarioDctm());
+		
+		ArrayList<String> arquivo = new ArrayList<String>();
+		
+		IDfQuery query = new DfQuery();
+		
+		query.setDQL(queryString);
+		
+		IDfCollection coll = query.execute(getSessDctm(), 0);
+		
+		while (coll.next()) {
+		
+			IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();	
+			
+			System.out.println("----------------------------------------------------");
+		    System.out.println("resultado: "+ typeObject.getString("resultado_query"));
+		    //System.out.println("creation date "+ typeObject.getString("r_object_id"));
+		    System.out.println("----------------------------------------------------");
+		    
+		    arquivo.add(typeObject.getString("resultado_query"));
+		}
+		
+		if (coll != null)
+		
+			coll.close();
+		
+		return arquivo; 
+		
+		}
+	
+	public ArrayList<String> ConsultarQueryData(String queryString) throws Exception {
+		
+		System.out.println(getRepositorioDctm());
+		System.out.println(getSessDctm());
+		System.out.println(getUsuarioDctm());
+		
+		ArrayList<String> arquivo = new ArrayList<String>();
+		
+		IDfQuery query = new DfQuery();
+		
+		query.setDQL(queryString);
+		
+		IDfCollection coll = query.execute(getSessDctm(), 0);
+		
+		while (coll.next()) {
+		
+			IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();	
+			
+			System.out.println("----------------------------------------------------");
+		    System.out.println("resultado: "+ typeObject.getString("object_name"));
+		    System.out.println("creation date "+ typeObject.getString("r_creation_date"));
+		    System.out.println("----------------------------------------------------");
+		    
+		    arquivo.add(typeObject.getString("object_name"));
+		    arquivo.add(typeObject.getString("r_creation_date"));
+		}
+		
+		if (coll != null)
+		
+			coll.close();
+		
+		return arquivo; 
+		
+		}
+	//------------------------------------------------------
+	
+	//UPDATE QUERYS----
+	public void ConsultarQueryUPDATE(String queryString) throws Exception {
 			
 			System.out.println(getRepositorioDctm());
 			System.out.println(getSessDctm());

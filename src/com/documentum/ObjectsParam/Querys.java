@@ -16,6 +16,12 @@ public class Querys {
 		return query;
 	}
 	
+	public static String PastaParaArquivoData(String PathDeBusca, String id_arquivo){
+		String query = "select object_name,r_creation_date from dm_sysobject where FOLDER('" + PathDeBusca +  "',descend) and object_name LIKE '%" + id_arquivo +"%'";
+		System.out.println(query);
+		return query;
+	}
+	
 	public static String VerificaPasta(String NomePasta){
 		String query = "select object_name as resultado_query from dm_folder where object_name='" + NomePasta + "' ";
 		return query;
