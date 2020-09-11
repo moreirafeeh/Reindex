@@ -1,6 +1,6 @@
-package src.Program;
+package Program;
 
-import src.org.tempuri.CalculatorSoap_CalculatorSoap12_Client;
+import org.tempuri.CalculatorSoap_CalculatorSoap12_Client;
 
 //------SOAP-----
 import java.io.ByteArrayInputStream;
@@ -25,13 +25,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.documentum.UtilsDocumentum;
+import com.documentum.ObjectsParam.Querys;
 
-import src.com.documentum.UtilsDocumentum;
-import src.com.documentum.ObjectsParam.Querys;
-
-import src.org.tempuri.Calculator;
-
+import org.tempuri.Calculator;
+import org.tempuri.CalculatorSoap;
 
 public class DocumentumRunner {
 
@@ -59,9 +59,6 @@ public class DocumentumRunner {
 		ArrayList<String> arquivosNaoIndexados;
 		arquivosNaoIndexados = Utils.SrcClear(Querys.PastaParaArquivo("/Sinistros Autos/Não Indexados"));
 		///--------------------------------------------------------------------
-		
-		
-		
 		
 		/// consultando web service ==
 		for(String params: arquivosNaoIndexados){
@@ -149,8 +146,8 @@ public class DocumentumRunner {
 			
 			// movimentacao do felipe == true -----
 			
-			//Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_ID("/Sinistros Autos/Não Indexados",params));
-			//Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK_ID("/Lucas Vidotti/ParametrosIncorretos",params));
+			Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_ID("/Sinistros Autos/Não Indexados",params));
+			Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK_ID("/Lucas Vidotti/ParametrosIncorretos",params));
 			
 			
 			//-----------------------------
@@ -164,7 +161,7 @@ public class DocumentumRunner {
 		//QName SERVICE_NAME = new QName("http://tempuri.org/", "Calculator");
 
 			try{
-			//	CalculatorSoap_CalculatorSoap12_Client.SOAP_TESTE(args);
+				CalculatorSoap_CalculatorSoap12_Client.SOAP_TESTE(args);
 			}
 		catch (Exception e){
 				//Utils.createFolder("Felipe Twitch", "parametros incorretos");
@@ -198,3 +195,10 @@ public class DocumentumRunner {
 
 	}
 }		
+		
+		
+		
+		//-------------------------------
+
+		
+
