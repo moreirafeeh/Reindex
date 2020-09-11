@@ -60,7 +60,7 @@ public class DocumentumRunner {
 		arquivosNaoIndexados = Utils.SrcClear(Querys.PastaParaArquivo("/Sinistros Autos/Não Indexados"));
 		///--------------------------------------------------------------------
 		
-		System.out.println("==== ARRAY ====== "+arquivosNaoIndexados);
+		
 		
 		
 		/// consultando web service ==
