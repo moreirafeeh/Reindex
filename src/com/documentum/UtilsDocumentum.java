@@ -1,14 +1,14 @@
- package com.documentum;
+ package src.com.documentum;
 import java.io.IOException;
 
 import java.util.ArrayList;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.documentum.ObjectsParam.Querys;
+import src.com.documentum.ObjectsParam.Querys;
 
-import com.documentum.conexao_documentum;
-import com.documentum.ObjectsParam.Querys;
+import src.com.documentum.conexao_documentum;
+import src.com.documentum.ObjectsParam.Querys;
 import com.documentum.com.DfClientX;
 import com.documentum.com.IDfClientX;
 import com.documentum.fc.client.DfQuery;
@@ -220,13 +220,45 @@ public class UtilsDocumentum extends conexao_documentum {
 			}
 		
 		//-------------------------------------------------------------------------
+	
+	
+	    /*
+	     * Metodo InvalidObjectNameZero() 
+	     * pega o r_object_name dos arquivos com object_name vazio por meio de uma query(MoveFileNameNull) 
+	     * faz a movimentação desse arquivo para outra pasta com o UPDATE_LINK_NAME_NULL e UPDATE_UNLINK_NAME_NULL
+	     */
+		public void InvalidObjectNameZero() throws Exception{
+			
+			IDfQuery query = new DfQuery();
+			
+			query.setDQL(Querys.MoveFileNameNull("Não Indexados"));
+			
+			IDfCollection collNotName = query.execute(getSessDctm(), 0);
+			
+			while (collNotName.next()) {
+				
+				
+				IDfTypedObject typeObject = (IDfTypedObject) collNotName.getTypedObject();
+				
+				
+				ConsultarQueryUPDATE(Querys.UPDATE_LINK_NAME_NULL("/Lucas Vidotti/ParametrosIncorretos",typeObject.getString("r_object_id")));
+				ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_NAME_NULL("/Sinistros Autos/Não Indexados",typeObject.getString("r_object_id")));
+			}
+			
+		}
 		
+
+		/*
+		 * Metodo SrcClear()
+		 * faz uma query String queryString = PastaParaArquivo pegando o object_name 
+		 * Quebra o object_name com "Split(_)" e faz a validação
+		 * faz a movimentação dos arquivos que não foram validados com UPDATE_LINK e UPDATE_UNLINK
+		 */
 		public ArrayList<String> SrcClear(String queryString) throws Exception {
-
-			System.out.println(getRepositorioDctm());
-			System.out.println(getSessDctm());
-			System.out.println(getUsuarioDctm());
-
+			
+			// metodo que faz a limpeza de arquivos com object_name vazio
+			InvalidObjectNameZero(); 
+			
 			ArrayList<String> arquivo = new ArrayList<String>();
 
 			IDfQuery query = new DfQuery();
@@ -235,20 +267,18 @@ public class UtilsDocumentum extends conexao_documentum {
 
 			IDfCollection coll = query.execute(getSessDctm(), 0);
 
-			int cont =0;
 			while (coll.next()) {
 
 				IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
 
 				String objectNameFile = typeObject.getString("resultado_query");
 
-				// tirar extenção do aquivo
-
 				String[] params = objectNameFile.split("_");
 				
 				for (String param : params) {
-
+                    // remove a extensão do arquivo
 					param = FilenameUtils.removeExtension(param);
+					
 					// valida sinistro ==
 					if (param.matches("[0-9]*") && param.length() >= 13) {
 						if (Double.parseDouble(param) > 0 ) {
@@ -271,21 +301,18 @@ public class UtilsDocumentum extends conexao_documentum {
 					 if (param.length() == 5 && param.substring(0, 3).matches("[A-Z]*")) {
 							 arquivo.add(objectNameFile);
 							  break;
-						}
-				
 					}
-				
-				
-				/// se não for add no array ele eh expurgado ==
-				if(objectNameFile.equals("")){
-					System.out.println("vazio");
-				}
+					 
+					}
+			
+				/// se o params não passar na validação do for o arquivo eh movimentado para outra pasta
+			 if(arquivo.size()==0||arquivo.get(arquivo.size()-1) != objectNameFile){
+				 ConsultarQueryUPDATE(Querys.UPDATE_LINK("/Lucas Vidotti/ParametrosIncorretos",objectNameFile));
+       			ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/Sinistros Autos/Não Indexados",objectNameFile));
 					
-//					if(arquivo.get(arquivo.size()) != objectNameFile || objectNameFile.equals("")){
-//						ConsultarQueryUPDATE(Querys.UPDATE_LINK("/Lucas Vidotti/ParametrosIncorretos",objectNameFile));
-//						ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/Sinistros Autos/Não Indexados",objectNameFile));
-//					}
 				}
+
+			}
 
 			
 
