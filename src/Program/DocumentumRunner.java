@@ -66,8 +66,6 @@ public class DocumentumRunner {
 		/// consultando web service ==
 		for(String params: arquivosNaoIndexados){
 
-		
-
 			
 //			String param1=params.substring(4,19);
 //			String param2=params.substring(20,37); 
@@ -79,13 +77,16 @@ public class DocumentumRunner {
 //			/// chamada do web service == 
 //			QName SERVICE_NAME = new QName("http://tempuri.org/", "Calculator");
 //			CalculatorSoap_CalculatorSoap12_Client.SOAP_TESTE(args);// params
+			boolean temPasta = true;
+			
+			if(temPasta){
 			
 			//Registro JOAO depende do web service = false ----
 			
 			ArrayList<String> arquivosNaoIndexadosMenos30;
 			ArrayList<String> arquivosNaoIndexadosMais60;
 			
-			boolean buscarPasta = false;
+			boolean expurgo = false;
 			/*
 			 * Para cada arquivo que passou o filtro de arquivos fora do padrão
 			 * e validado se o arquivo está registrado em uma das pastas.
@@ -116,8 +117,7 @@ public class DocumentumRunner {
 					Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Menos30", params));
 					Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/Mais60", params));
 			    }  
-			    buscarPasta = true;
-		}
+			}
 			
 			if(!arquivosNaoIndexadosMais60.isEmpty()){
 				
@@ -127,13 +127,12 @@ public class DocumentumRunner {
 			    long diffInMillies = Math.abs(new Date().getTime() - dataDeEntradaDocumento.getTime());
 			    int diasProcessado = (int) (diffInMillies / (1000*60*60*24));
 			    
-			    buscarPasta = true;
 			    /*
 			     * Caso o documento tenham sido processados por mais de 60 dias.
 			     * Passa pelo processo de expurgo caso atinga o sexagésimo dia.
 			    */
 			    if(diasProcessado >= 60){
-			    	buscarPasta = false;
+			    	expurgo = false;
 			    }
 			}
 			
@@ -146,6 +145,10 @@ public class DocumentumRunner {
 			// movimentacao do lucas ------
 			
 			//-----------------------------
+			
+			
+			}
+			
 			
 			// movimentacao do felipe == true -----
 			
