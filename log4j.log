@@ -90,3 +90,26 @@ DfException:: THREAD: main; MSG: [DFC_BOF_GLOBAL_REGISTRY_NOT_CONFIGURED] A glob
 	at src.com.documentum.conexao_documentum.<init>(conexao_documentum.java:39)
 	at src.com.documentum.UtilsDocumentum.<init>(UtilsDocumentum.java:44)
 	at src.Program.DocumentumRunner.main(DocumentumRunner.java:45)
+0 [main] ERROR com.documentum.fc.common.impl.logging.LoggingConfigurator  - Problem locating log4j configuration
+1 [main] WARN com.documentum.fc.common.impl.logging.LoggingConfigurator  - Using default log4j configuration
+2 [main] ERROR com.documentum.fc.common.impl.preferences.PreferencesManager  - [DFC_PREFERENCE_LOAD_FAILED] Failed to load persistent preferences from null
+java.io.FileNotFoundException: dfc.properties
+	at com.documentum.fc.common.impl.preferences.PreferencesManager.locateMainPersistentStore(PreferencesManager.java:378)
+	at com.documentum.fc.common.impl.preferences.PreferencesManager.readPersistentProperties(PreferencesManager.java:332)
+	at com.documentum.fc.common.impl.preferences.PreferencesManager.<init>(PreferencesManager.java:40)
+	at com.documentum.fc.common.DfPreferences.initialize(DfPreferences.java:79)
+	at com.documentum.fc.common.DfPreferences.getInstance(DfPreferences.java:58)
+	at com.documentum.fc.impl.RuntimeContext.<clinit>(RuntimeContext.java:177)
+	at com.documentum.fc.client.DfClient.<clinit>(DfClient.java:721)
+	at src.com.documentum.conexao_documentum.<init>(conexao_documentum.java:39)
+	at src.com.documentum.UtilsDocumentum.<init>(UtilsDocumentum.java:20)
+	at src.Program.DocumentumRunner.main(DocumentumRunner.java:45)
+28044 [main] WARN com.documentum.fc.client.security.internal.RegistrationMgr  - [DFC_SECURITY_GR_PUBLICATION_FAILED] Publication of DFC instance with global registry failed
+DfException:: THREAD: main; MSG: [DFC_BOF_GLOBAL_REGISTRY_NOT_CONFIGURED] A global registry is not configured; ERRORCODE: ff; NEXT: null
+	at com.documentum.fc.client.security.impl.DfcIdentityPublisher.<init>(DfcIdentityPublisher.java:51)
+	at com.documentum.fc.client.security.internal.RegistrationMgr.register(RegistrationMgr.java:34)
+	at com.documentum.fc.impl.RuntimeContext.<clinit>(RuntimeContext.java:191)
+	at com.documentum.fc.client.DfClient.<clinit>(DfClient.java:721)
+	at src.com.documentum.conexao_documentum.<init>(conexao_documentum.java:39)
+	at src.com.documentum.UtilsDocumentum.<init>(UtilsDocumentum.java:20)
+	at src.Program.DocumentumRunner.main(DocumentumRunner.java:45)
