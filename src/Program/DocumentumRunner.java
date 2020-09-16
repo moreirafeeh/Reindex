@@ -120,7 +120,7 @@ public class DocumentumRunner {
 			
 			if(!arquivosNaoIndexadosMais60.isEmpty()){
 				
-				String dataDocumento = arquivosNaoIndexadosMais60.get(1).split(" ")[0];
+				String dataDocumento = arquivosNaoIndexadosMais60.get(2).split(" ")[0];
 			    Date dataDeEntradaDocumento = new SimpleDateFormat("dd/MM/yyyy").parse(dataDocumento);  
 			    
 			    long diffInMillies = Math.abs(new Date().getTime() - dataDeEntradaDocumento.getTime());
