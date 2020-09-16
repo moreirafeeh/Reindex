@@ -1,41 +1,19 @@
  package src.com.documentum;
-import java.io.IOException;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.commons.io.FilenameUtils;
 
 import src.com.documentum.ObjectsParam.Querys;
 
-import src.com.documentum.conexao_documentum;
-import src.com.documentum.ObjectsParam.Querys;
-import com.documentum.com.DfClientX;
-import com.documentum.com.IDfClientX;
 import com.documentum.fc.client.DfQuery;
-import com.documentum.fc.client.IDfACL;
-import com.documentum.fc.client.IDfActivity;
 import com.documentum.fc.client.IDfCollection;
-import com.documentum.fc.client.IDfDocbaseMap;
 import com.documentum.fc.client.IDfDocument;
 import com.documentum.fc.client.IDfFolder;
-import com.documentum.fc.client.IDfProcess;
 import com.documentum.fc.client.IDfQuery;
-import com.documentum.fc.client.IDfSysObject;
-import com.documentum.fc.client.IDfType;
 import com.documentum.fc.client.IDfTypedObject;
-import com.documentum.fc.client.IDfVirtualDocument;
-import com.documentum.fc.client.IDfVirtualDocumentNode;
-import com.documentum.fc.client.IDfWorkflowBuilder;
-import com.documentum.fc.common.DfException;
-import com.documentum.fc.common.DfId;
-import com.documentum.fc.common.DfList;
-import com.documentum.fc.common.IDfAttr;
-import com.documentum.fc.common.IDfId;
-import com.documentum.fc.common.IDfList;
-import com.documentum.operations.IDfExportNode;
-import com.documentum.operations.IDfExportOperation;
-
-import org.apache.commons.io.FilenameUtils;
 
 
 public class UtilsDocumentum extends conexao_documentum {
@@ -123,11 +101,38 @@ public class UtilsDocumentum extends conexao_documentum {
 		    document.setContentType(tipo_conteudo);
 		
 		    document.link(documentum_path);
+			
+		    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+			String strDate = dateFormat.format(new Date()); 
+			
+		    document.setString("date_controler", strDate);
 		
 		    document.save();
 		
-		    }	
+		    }
+		System.out.println(document.getString("date_controler"));
+		return document;
 		
+	}
+	
+	public IDfDocument createObject(String Nome_doc,String doc_type, String tipo_conteudo, String path_conteudo, String documentum_path,String param) throws Exception {
+		
+		IDfDocument document = (IDfDocument) getSessDctm().newObject(doc_type);
+		
+		if (document != null) {
+		
+			document.setObjectName(Nome_doc);
+		
+		    document.setContentType(tipo_conteudo);
+		
+		    document.link(documentum_path);
+			
+		    document.setString("date_controler", param);
+		
+		    document.save();
+		
+		    }
+		System.out.println(document.getString("date_controler"));
 		return document;
 		
 	}
@@ -153,7 +158,7 @@ public class UtilsDocumentum extends conexao_documentum {
 			
 			System.out.println("----------------------------------------------------");
 		    System.out.println("resultado: "+ typeObject.getString("resultado_query"));
-		    //System.out.println("creation date "+ typeObject.getString("r_object_id"));
+		    System.out.println("creation date "+ typeObject.getString("r_object_id"));
 		    System.out.println("----------------------------------------------------");
 		    
 		    arquivo.add(typeObject.getString("resultado_query"));
@@ -186,10 +191,12 @@ public class UtilsDocumentum extends conexao_documentum {
 			IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();	
 			
 			System.out.println("----------------------------------------------------");
+			System.out.println("resultado: "+ typeObject.getString("r_object_id"));
 		    System.out.println("resultado: "+ typeObject.getString("object_name"));
 		    System.out.println("creation date "+ typeObject.getString("r_creation_date"));
 		    System.out.println("----------------------------------------------------");
 		    
+		    arquivo.add(typeObject.getString("r_object_id"));
 		    arquivo.add(typeObject.getString("object_name"));
 		    arquivo.add(typeObject.getString("r_creation_date"));
 		}
