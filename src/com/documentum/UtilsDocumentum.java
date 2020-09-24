@@ -1,41 +1,19 @@
- package com.documentum;
-import java.io.IOException;
-
+ package src.com.documentum;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.documentum.ObjectsParam.Querys;
+import src.com.documentum.ObjectsParam.Querys;
 
-import com.documentum.conexao_documentum;
-import com.documentum.ObjectsParam.Querys;
-import com.documentum.com.DfClientX;
-import com.documentum.com.IDfClientX;
 import com.documentum.fc.client.DfQuery;
-import com.documentum.fc.client.IDfACL;
-import com.documentum.fc.client.IDfActivity;
 import com.documentum.fc.client.IDfCollection;
-import com.documentum.fc.client.IDfDocbaseMap;
 import com.documentum.fc.client.IDfDocument;
 import com.documentum.fc.client.IDfFolder;
-import com.documentum.fc.client.IDfProcess;
 import com.documentum.fc.client.IDfQuery;
-import com.documentum.fc.client.IDfSysObject;
-import com.documentum.fc.client.IDfType;
 import com.documentum.fc.client.IDfTypedObject;
-import com.documentum.fc.client.IDfVirtualDocument;
-import com.documentum.fc.client.IDfVirtualDocumentNode;
-import com.documentum.fc.client.IDfWorkflowBuilder;
-import com.documentum.fc.common.DfException;
-import com.documentum.fc.common.DfId;
-import com.documentum.fc.common.DfList;
-import com.documentum.fc.common.IDfAttr;
-import com.documentum.fc.common.IDfId;
-import com.documentum.fc.common.IDfList;
-import com.documentum.operations.IDfExportNode;
-import com.documentum.operations.IDfExportOperation;
-
-import org.apache.commons.io.FilenameUtils;
 
 
 public class UtilsDocumentum extends conexao_documentum {
@@ -123,11 +101,38 @@ public class UtilsDocumentum extends conexao_documentum {
 		    document.setContentType(tipo_conteudo);
 		
 		    document.link(documentum_path);
+			
+		    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+			String strDate = dateFormat.format(new Date()); 
+			
+		    document.setString("date_controler", strDate);
 		
 		    document.save();
 		
-		    }	
+		    }
+		System.out.println(document.getString("date_controler"));
+		return document;
 		
+	}
+	
+	public IDfDocument createObject(String Nome_doc,String doc_type, String tipo_conteudo, String path_conteudo, String documentum_path,String param) throws Exception {
+		
+		IDfDocument document = (IDfDocument) getSessDctm().newObject(doc_type);
+		
+		if (document != null) {
+		
+			document.setObjectName(Nome_doc);
+		
+		    document.setContentType(tipo_conteudo);
+		
+		    document.link(documentum_path);
+			
+		    document.setString("date_controler", param);
+		
+		    document.save();
+		
+		    }
+		System.out.println(document.getString("date_controler"));
 		return document;
 		
 	}
@@ -153,7 +158,7 @@ public class UtilsDocumentum extends conexao_documentum {
 			
 			System.out.println("----------------------------------------------------");
 		    System.out.println("resultado: "+ typeObject.getString("resultado_query"));
-		    //System.out.println("creation date "+ typeObject.getString("r_object_id"));
+		    System.out.println("creation date "+ typeObject.getString("r_object_id"));
 		    System.out.println("----------------------------------------------------");
 		    
 		    arquivo.add(typeObject.getString("resultado_query"));
@@ -186,10 +191,12 @@ public class UtilsDocumentum extends conexao_documentum {
 			IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();	
 			
 			System.out.println("----------------------------------------------------");
+			System.out.println("resultado: "+ typeObject.getString("r_object_id"));
 		    System.out.println("resultado: "+ typeObject.getString("object_name"));
 		    System.out.println("creation date "+ typeObject.getString("r_creation_date"));
 		    System.out.println("----------------------------------------------------");
 		    
+		    arquivo.add(typeObject.getString("r_object_id"));
 		    arquivo.add(typeObject.getString("object_name"));
 		    arquivo.add(typeObject.getString("r_creation_date"));
 		}
@@ -220,13 +227,45 @@ public class UtilsDocumentum extends conexao_documentum {
 			}
 		
 		//-------------------------------------------------------------------------
+	
+	
+	    /*
+	     * Metodo InvalidObjectNameZero() 
+	     * pega o r_object_name dos arquivos com object_name vazio por meio de uma query(MoveFileNameNull) 
+	     * faz a movimentação desse arquivo para outra pasta com o UPDATE_LINK_NAME_NULL e UPDATE_UNLINK_NAME_NULL
+	     */
+		public void InvalidObjectNameZero() throws Exception{
+			
+			IDfQuery query = new DfQuery();
+			
+			query.setDQL(Querys.MoveFileNameNull("Não Indexados"));
+			
+			IDfCollection collNotName = query.execute(getSessDctm(), 0);
+			
+			while (collNotName.next()) {
+				
+				
+				IDfTypedObject typeObject = (IDfTypedObject) collNotName.getTypedObject();
+				
+				
+				ConsultarQueryUPDATE(Querys.UPDATE_LINK_NAME_NULL("/Lucas Vidotti/ParametrosIncorretos",typeObject.getString("r_object_id")));
+				ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_NAME_NULL("/Sinistros Autos/Não Indexados",typeObject.getString("r_object_id")));
+			}
+			
+		}
 		
+
+		/*
+		 * Metodo SrcClear()
+		 * faz uma query String queryString = PastaParaArquivo pegando o object_name 
+		 * Quebra o object_name com "Split(_)" e faz a validação
+		 * faz a movimentação dos arquivos que não foram validados com UPDATE_LINK e UPDATE_UNLINK
+		 */
 		public ArrayList<String> SrcClear(String queryString) throws Exception {
-
-			System.out.println(getRepositorioDctm());
-			System.out.println(getSessDctm());
-			System.out.println(getUsuarioDctm());
-
+			
+			// metodo que faz a limpeza de arquivos com object_name vazio
+			InvalidObjectNameZero(); 
+			
 			ArrayList<String> arquivo = new ArrayList<String>();
 
 			IDfQuery query = new DfQuery();
@@ -235,20 +274,18 @@ public class UtilsDocumentum extends conexao_documentum {
 
 			IDfCollection coll = query.execute(getSessDctm(), 0);
 
-			int cont =0;
 			while (coll.next()) {
 
 				IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
 
 				String objectNameFile = typeObject.getString("resultado_query");
 
-				// tirar extenção do aquivo
-
 				String[] params = objectNameFile.split("_");
 				
 				for (String param : params) {
-
+                    // remove a extensão do arquivo
 					param = FilenameUtils.removeExtension(param);
+					
 					// valida sinistro ==
 					if (param.matches("[0-9]*") && param.length() >= 13) {
 						if (Double.parseDouble(param) > 0 ) {
@@ -271,21 +308,18 @@ public class UtilsDocumentum extends conexao_documentum {
 					 if (param.length() == 5 && param.substring(0, 3).matches("[A-Z]*")) {
 							 arquivo.add(objectNameFile);
 							  break;
-						}
-				
 					}
-				
-				
-				/// se não for add no array ele eh expurgado ==
-				if(objectNameFile.equals("")){
-					System.out.println("vazio");
-				}
+					 
+					}
+			
+				/// se o params não passar na validação do for o arquivo eh movimentado para outra pasta
+			 if(arquivo.size()==0||arquivo.get(arquivo.size()-1) != objectNameFile){
+				 ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",objectNameFile));
+       			ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/Sinistros Autos/Não Indexados",objectNameFile));
 					
-//					if(arquivo.get(arquivo.size()) != objectNameFile || objectNameFile.equals("")){
-//						ConsultarQueryUPDATE(Querys.UPDATE_LINK("/Lucas Vidotti/ParametrosIncorretos",objectNameFile));
-//						ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/Sinistros Autos/Não Indexados",objectNameFile));
-//					}
 				}
+
+			}
 
 			
 

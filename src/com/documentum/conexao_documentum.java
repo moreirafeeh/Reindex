@@ -1,4 +1,4 @@
-package com.documentum;
+package src.com.documentum;
 import com.documentum.fc.client.DfClient;
 import com.documentum.fc.client.IDfClient;
 import com.documentum.fc.client.IDfSession;
