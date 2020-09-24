@@ -2,6 +2,16 @@
 <classpath>
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+<<<<<<< HEAD
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/dfc/config"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/commons-io-2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/cxf-bundle-2.6.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/jaxb-api-2.2.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/jaxws-api-2.2.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/jsr181-api-1.0-MR1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/com.emc.ide.external.dfc_1.0.0/externaldfc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/com.emc.ide.external.dfc_1.0.0/lib/dfc.jar"/>
+=======
 	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/commons-io-2.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/cxf-bundle-2.6.9.jar"/>
 	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/DctmImportWebmAutos.jar"/>
@@ -21,5 +31,6 @@
 	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/apache-cxf-2.6.9/apache-cxf-2.6.9/lib/cxf-xjc-runtime-2.6.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/apache-cxf-2.6.9/apache-cxf-2.6.9/lib/cxf-xjc-ts-2.6.2.jar"/>
 	<classpathentry kind="lib" path="C:/Documentum/Config"/>
+>>>>>>> 3c59e3a4b12e2771b6518889b76cb3838b985938
 	<classpathentry kind="output" path="bin"/>
 </classpath>
