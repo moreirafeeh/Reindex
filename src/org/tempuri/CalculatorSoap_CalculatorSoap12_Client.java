@@ -118,7 +118,7 @@ public final class CalculatorSoap_CalculatorSoap12_Client {
         int _divide_intB = 2;
         int _divide__return = port.divide(_divide_intA, _divide_intB);
         System.out.println("divide.result=" + _divide__return);
-
+        System.out.println("ESPERANDO DADOS DA REQUISICAO");
 
         }
     }
