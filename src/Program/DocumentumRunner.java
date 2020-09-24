@@ -1,6 +1,6 @@
-package src.Program;
+package Program;
 
-import src.org.tempuri.CalculatorSoap_CalculatorSoap12_Client;
+//import org.tempuri.CalculatorSoap_CalculatorSoap12_Client;
 
 //------SOAP-----
 import java.io.ByteArrayInputStream;
@@ -27,10 +27,10 @@ import java.util.List;
 
 
 
-import src.com.documentum.UtilsDocumentum;
-import src.com.documentum.ObjectsParam.Querys;
+import com.documentum.UtilsDocumentum;
+import com.documentum.ObjectsParam.Querys;
 
-import src.org.tempuri.Calculator;
+//import org.tempuri.CalculatorSoap_CalculatorSoap12_Client;
 
 
 public class DocumentumRunner {
@@ -57,87 +57,83 @@ public class DocumentumRunner {
 		
 		/// joga o object_name dos arquivos no array=== 
 		ArrayList<String> arquivosNaoIndexados;
-		arquivosNaoIndexados = Utils.SrcClear(Querys.PastaParaArquivo("/Sinistros Autos/Não Indexados"));
+		arquivosNaoIndexados = Utils.SrcClear(Querys.PastaParaArquivo("/teste_pasta_reindex/Nao_Indexados_TESTE"));
+		System.out.println(arquivosNaoIndexados.size());
 		///--------------------------------------------------------------------
-		
-		
 		
 		
 		/// consultando web service ==
 		for(String params: arquivosNaoIndexados){
 
+		 	String[] DocumentoSplitado =  params.split("_");
+		 	 
+//			chamada do web service == 
+			//QName SERVICE_NAME = new QName("http://tempuri.org/", "Calculator");
+			//CalculatorSoap_CalculatorSoap12_Client.SOAP_TESTE(args);// params
+		 	boolean temPasta  = Utils.ConsultarPasta(Querys.PastaExiste("S"+DocumentoSplitado[1]));
 			
-//			String param1=params.substring(4,19);
-//			String param2=params.substring(20,37); 
-//			String paramBoard = params.substring(38,45);
-//			String param4 =  params.substring(46,60);
-
+			if(!temPasta){
+				System.out.println("ENTREI AQUIII");
+				//Registro JOAO depende do web service = false ----
 			
-//			/// chamada do web service == 
-//			QName SERVICE_NAME = new QName("http://tempuri.org/", "Calculator");
-//			CalculatorSoap_CalculatorSoap12_Client.SOAP_TESTE(args);// params
-			boolean temPasta = true;
+				ArrayList<String> arquivosNaoIndexadosMenos30;
+				ArrayList<String> arquivosNaoIndexadosMais60;
 			
-			if(temPasta){
-			
-			//Registro JOAO depende do web service = false ----
-			
-			ArrayList<String> arquivosNaoIndexadosMenos30;
-			ArrayList<String> arquivosNaoIndexadosMais60;
-			
-			boolean expurgo = false;
-			/*
-			 * Para cada arquivo que passou o filtro de arquivos fora do padrão
-			 * e validado se o arquivo está registrado em uma das pastas.
-			 * Caso não seja encontrado é criado o registro na pasta de 
-			 */
-			arquivosNaoIndexadosMenos30 = Utils.ConsultarQueryData(Querys.ArquivoNaoIndexado30(params));
-//			System.out.println("Menos 30");
-//			System.out.println(arquivosNaoIndexadosMenos30);
-			
-			arquivosNaoIndexadosMais60 = Utils.ConsultarQueryData(Querys.ArquivoNaoIndexado60(params));
-//			System.out.println("Mais 60");
-//			System.out.println(arquivosNaoIndexadosMais60);
-			
-			if(!arquivosNaoIndexadosMenos30.isEmpty()){
+				boolean expurgo = false;
+				/*
+				 * Para cada arquivo que passou o filtro de arquivos fora do padrão
+				 * e validado se o arquivo está registrado em uma das pastas.
+				 * Caso não seja encontrado é criado o registro na pasta de 
+				 */
+				arquivosNaoIndexadosMenos30 = Utils.ConsultarQueryData(Querys.ArquivoNaoIndexado30(params));
+				System.out.println("Menos 30");
+				System.out.println(arquivosNaoIndexadosMenos30);
 				
-				String dataDocumento = arquivosNaoIndexadosMenos30.get(2).split(" ")[0];
-			    Date dataDeEntradaDocumento = new SimpleDateFormat("dd/MM/yyyy").parse(dataDocumento);  
-			    
-			    long diffInMillies = Math.abs(new Date().getTime() - dataDeEntradaDocumento.getTime());
-			    int diasProcessado = (int) (diffInMillies / (1000*60*60*24));
-		    
-			    /*
-			     * Caso o documento tenham sido processados por mais de 30 dias.
-			     * Passa pelo processo de mudança de pasta caso atinga o trigésimo dia.
-			    */
-			    if(diasProcessado >= 31){
-					Utils.ConsultarQueryUPDATE(Querys.DELETE(arquivosNaoIndexadosMenos30.get(0)));
-					Utils.createObject(params, "date_nao_indexado_60", "", "", "/teste_pasta_reindex/Mais60",dataDocumento);
-			    }  
-			}
+				arquivosNaoIndexadosMais60 = Utils.ConsultarQueryData(Querys.ArquivoNaoIndexado60(params));
+				System.out.println("Mais 60");
+				System.out.println(arquivosNaoIndexadosMais60);
 			
-			if(!arquivosNaoIndexadosMais60.isEmpty()){
+				if(!arquivosNaoIndexadosMenos30.isEmpty()){
+					
+					String dataDocumento = arquivosNaoIndexadosMenos30.get(2).split(" ")[0];
+				    Date dataDeEntradaDocumento = new SimpleDateFormat("dd/MM/yyyy").parse(dataDocumento);  
+				    
+				    long diffInMillies = Math.abs(new Date().getTime() - dataDeEntradaDocumento.getTime());
+				    int diasProcessado = (int) (diffInMillies / (1000*60*60*24));
+			    
+				    /*
+				     * Caso o documento tenham sido processados por mais de 30 dias.
+				     * Passa pelo processo de mudança de pasta caso atinga o trigésimo dia.
+				    */
+				    if(diasProcessado >= 31){
+						Utils.ConsultarQueryUPDATE(Querys.DELETE(arquivosNaoIndexadosMenos30.get(0)));
+						Utils.createObject(params, "date_nao_indexado_60", "", "", "/teste_pasta_reindex/Mais60",dataDocumento);
+				    }  
+				}
+			
+				if(!arquivosNaoIndexadosMais60.isEmpty()){
+					
+					String dataDocumento = arquivosNaoIndexadosMais60.get(2).split(" ")[0];
+				    Date dataDeEntradaDocumento = new SimpleDateFormat("dd/MM/yyyy").parse(dataDocumento);  
+				    
+				    long diffInMillies = Math.abs(new Date().getTime() - dataDeEntradaDocumento.getTime());
+				    int diasProcessado = (int) (diffInMillies / (1000*60*60*24));
+				    
+				    /*
+				     * Caso o documento tenham sido processados por mais de 60 dias.
+				     * Passa pelo processo de expurgo caso atinga o sexagésimo dia.
+				    */
+				    if(diasProcessado >= 60){
+				    	Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/expurgo",params, "/teste_pasta_reindex/Nao_Indexados_TESTE"));
+				    	Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",params));
+				    }
+				}
+			
+				if(arquivosNaoIndexadosMenos30.isEmpty() && arquivosNaoIndexadosMais60.isEmpty()){
+					Utils.createObject(params, "date_nao_indexado_30", "", "", "/teste_pasta_reindex/Menos30");
+				}
+			
 				
-				String dataDocumento = arquivosNaoIndexadosMais60.get(1).split(" ")[0];
-			    Date dataDeEntradaDocumento = new SimpleDateFormat("dd/MM/yyyy").parse(dataDocumento);  
-			    
-			    long diffInMillies = Math.abs(new Date().getTime() - dataDeEntradaDocumento.getTime());
-			    int diasProcessado = (int) (diffInMillies / (1000*60*60*24));
-			    
-			    /*
-			     * Caso o documento tenham sido processados por mais de 60 dias.
-			     * Passa pelo processo de expurgo caso atinga o sexagésimo dia.
-			    */
-			    if(diasProcessado >= 60){
-			    	expurgo = false;
-			    }
-			}
-			
-			if(arquivosNaoIndexadosMenos30.isEmpty() && arquivosNaoIndexadosMais60.isEmpty()){
-				Utils.createObject(params, "date_nao_indexado_30", "", "", "/teste_pasta_reindex/Menos30");
-			}
-			
 			//-----------------------------
 			
 			// movimentacao do lucas ------
@@ -147,55 +143,14 @@ public class DocumentumRunner {
 			
 			}
 			
+			else{
+				Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/S"+ DocumentoSplitado[1] + "/TRC03",params, "/teste_pasta_reindex/Nao_Indexados_TESTE"));
+				Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",params));
+			}
 			
-			// movimentacao do felipe == true -----
-			
-			//Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_ID("/Sinistros Autos/Não Indexados",params));
-			//Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK_ID("/Lucas Vidotti/ParametrosIncorretos",params));
-			
-			
-			//-----------------------------
 		}
 		//------------------------------------------------------------------
 		
-		
-		
-		
-		//for(int i = 0; i <= arquivosNaoIndexados.size(); i++){
-		//QName SERVICE_NAME = new QName("http://tempuri.org/", "Calculator");
-
-			try{
-			//	CalculatorSoap_CalculatorSoap12_Client.SOAP_TESTE(args);
-			}
-		catch (Exception e){
-				//Utils.createFolder("Felipe Twitch", "parametros incorretos");
-				//Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/Felipe Twitch/Felipe Teste", "0900069f800b99ba"));
-				//Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/Felipe Twitch/parametros incorretos", "0900069f800b99ba"));
-				//break;
-			}
-			/*
-			try{
-				validarParametrosDaReq(retornoReq);
-			}
-			catch (Exception e){
-				//Utils.createFolder("Felipe Twitch", "Formatos incorretos");
-				//Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/Felipe Twitch/Felipe Teste", "0900069f800b99ba"));
-				//Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/Felipe Twitch/Formatos incorretos", "0900069f800b99ba"));
-				break;
-			}
-			try{
-				Utils.createFolder("Felipe Twitch", "PASTA COM NOME DO ARQUIVO FORMATADO");
-				Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/Felipe Twitch/Felipe Teste", "0900069f800b99ba"));
-				Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/Felipe Twitch/Formatos incorretos", "0900069f800b99ba"));
-			}
-			catch (Exception e){
-				continue;
-			}
-			
-			lib.requisicao(CriarAgenda);
-				
-	}
-	*/
 
 	}
 }		

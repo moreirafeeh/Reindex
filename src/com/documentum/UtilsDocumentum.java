@@ -1,4 +1,4 @@
- package src.com.documentum;
+ package com.documentum;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Date;
 
 import org.apache.commons.io.FilenameUtils;
 
-import src.com.documentum.ObjectsParam.Querys;
+import com.documentum.ObjectsParam.Querys;
 
 import com.documentum.fc.client.DfQuery;
 import com.documentum.fc.client.IDfCollection;
@@ -172,6 +172,46 @@ public class UtilsDocumentum extends conexao_documentum {
 		
 		}
 	
+	
+public boolean ConsultarPasta(String queryString) throws Exception {
+		
+		System.out.println(getRepositorioDctm());
+		System.out.println(getSessDctm());
+		System.out.println(getUsuarioDctm());
+		
+		IDfQuery query = new DfQuery();
+		
+		query.setDQL(queryString);
+		
+		IDfCollection coll = query.execute(getSessDctm(), 0);
+		
+		boolean pastaExiste = false;
+		
+		
+		while (coll.next()) {
+		
+			IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();	
+			
+			System.out.println("----------------------------------------------------");
+		    System.out.println("resultado: "+ typeObject.getString("resultado_query"));
+		    //System.out.println("creation date "+ typeObject.getString("r_object_id"));
+		    System.out.println("----------------------------------------------------");
+		    
+		    String arquivo = typeObject.getString("resultado_query");
+		    pastaExiste = Integer.parseInt(arquivo) > 0;
+		    
+		}
+		
+		if (coll != null)
+		
+			coll.close();
+		
+		return pastaExiste; 
+		
+		}
+	
+	
+	
 	public ArrayList<String> ConsultarQueryData(String queryString) throws Exception {
 		
 		System.out.println(getRepositorioDctm());
@@ -284,38 +324,27 @@ public class UtilsDocumentum extends conexao_documentum {
 				
 				for (String param : params) {
                     // remove a extensão do arquivo
-					param = FilenameUtils.removeExtension(param);
-					
-					// valida sinistro ==
-					if (param.matches("[0-9]*") && param.length() >= 13) {
-						if (Double.parseDouble(param) > 0 ) {
+						param = FilenameUtils.removeExtension(param);
+						
+						// valida sinistro ==
+						if (param.matches("[0-9]*") && param.length() >= 13) {
+							if (Double.parseDouble(param) > 0 ) {
+								arquivo.add(objectNameFile);
+								break;
+							}
+						}
+						// valida protocolo ==
+						if (param.length() == 17 && Character.toString(param.charAt(14)).matches("[A-Z]*")) {
 							arquivo.add(objectNameFile);
 							break;
 						}
-					}
-					// valida protocolo ==
-					if (param.length() == 17 && Character.toString(param.charAt(14)).matches("[A-Z]*")) {
-						arquivo.add(objectNameFile);
-						break;
-					}
-						
-					// valida placa ==
-					 if (param.length() == 7 && param.substring(0, 3).matches("[A-Z]*")) {
-						 arquivo.add(objectNameFile);
-						 break;
-					}
-					// valida expediente ==
-					 if (param.length() == 5 && param.substring(0, 3).matches("[A-Z]*")) {
-							 arquivo.add(objectNameFile);
-							  break;
-					}
 					 
 					}
 			
 				/// se o params não passar na validação do for o arquivo eh movimentado para outra pasta
 			 if(arquivo.size()==0||arquivo.get(arquivo.size()-1) != objectNameFile){
-				 ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",objectNameFile));
-       			ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/Sinistros Autos/Não Indexados",objectNameFile));
+				 ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",objectNameFile,"/teste_pasta_reindex/Nao_Indexados_TESTE"));
+       			ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",objectNameFile));
 					
 				}
 
