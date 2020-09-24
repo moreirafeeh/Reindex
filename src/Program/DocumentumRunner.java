@@ -91,18 +91,17 @@ public class DocumentumRunner {
 			 * e validado se o arquivo está registrado em uma das pastas.
 			 * Caso não seja encontrado é criado o registro na pasta de 
 			 */
+			arquivosNaoIndexadosMenos30 = Utils.ConsultarQueryData(Querys.ArquivoNaoIndexado30(params));
+//			System.out.println("Menos 30");
+//			System.out.println(arquivosNaoIndexadosMenos30);
 			
-			arquivosNaoIndexadosMenos30 = Utils.ConsultarQueryData(Querys.PastaParaArquivoData("/teste_pasta_reindex/Menos30",params));
-			System.out.println("Menos 30");
-			System.out.println(arquivosNaoIndexadosMenos30);
-			
-			arquivosNaoIndexadosMais60 = Utils.ConsultarQueryData(Querys.PastaParaArquivoData("/teste_pasta_reindex/Mais60",params));
-			System.out.println("Mais 60");
-			System.out.println(arquivosNaoIndexadosMais60);
+			arquivosNaoIndexadosMais60 = Utils.ConsultarQueryData(Querys.ArquivoNaoIndexado60(params));
+//			System.out.println("Mais 60");
+//			System.out.println(arquivosNaoIndexadosMais60);
 			
 			if(!arquivosNaoIndexadosMenos30.isEmpty()){
 				
-				String dataDocumento = arquivosNaoIndexadosMenos30.get(1).split(" ")[0];
+				String dataDocumento = arquivosNaoIndexadosMenos30.get(2).split(" ")[0];
 			    Date dataDeEntradaDocumento = new SimpleDateFormat("dd/MM/yyyy").parse(dataDocumento);  
 			    
 			    long diffInMillies = Math.abs(new Date().getTime() - dataDeEntradaDocumento.getTime());
@@ -113,8 +112,8 @@ public class DocumentumRunner {
 			     * Passa pelo processo de mudança de pasta caso atinga o trigésimo dia.
 			    */
 			    if(diasProcessado >= 31){
-					Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Menos30", params));
-					Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/Mais60", params));
+					Utils.ConsultarQueryUPDATE(Querys.DELETE(arquivosNaoIndexadosMenos30.get(0)));
+					Utils.createObject(params, "date_nao_indexado_60", "", "", "/teste_pasta_reindex/Mais60",dataDocumento);
 			    }  
 			}
 			
@@ -136,7 +135,7 @@ public class DocumentumRunner {
 			}
 			
 			if(arquivosNaoIndexadosMenos30.isEmpty() && arquivosNaoIndexadosMais60.isEmpty()){
-				Utils.createObject(params, "dm_date_nao_indexado", "", "", "/teste_pasta_reindex/Menos30");
+				Utils.createObject(params, "date_nao_indexado_30", "", "", "/teste_pasta_reindex/Menos30");
 			}
 			
 			//-----------------------------
