@@ -71,7 +71,6 @@ public class DocumentumRunner {
 //			String param2=params.substring(20,37); 
 //			String paramBoard = params.substring(38,45);
 //			String param4 =  params.substring(46,60);
-			
 
 			
 //			/// chamada do web service == 

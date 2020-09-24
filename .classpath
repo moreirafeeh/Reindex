@@ -2,37 +2,13 @@
 <classpath>
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/apache-cxf-2.6.9/apache-cxf-2.6.9/lib/cxf-2.6.9.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/apache-cxf-2.6.9/apache-cxf-2.6.9/lib/cxf-manifest.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/apache-cxf-2.6.9/apache-cxf-2.6.9/lib/cxf-services-sts-core-2.6.9.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/apache-cxf-2.6.9/apache-cxf-2.6.9/lib/cxf-services-wsn-api-2.6.9.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/apache-cxf-2.6.9/apache-cxf-2.6.9/lib/cxf-services-wsn-core-2.6.9.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/apache-cxf-2.6.9/apache-cxf-2.6.9/lib/cxf-xjc-boolean-2.6.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/apache-cxf-2.6.9/apache-cxf-2.6.9/lib/cxf-xjc-bug671-2.6.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/apache-cxf-2.6.9/apache-cxf-2.6.9/lib/cxf-xjc-dv-2.6.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/apache-cxf-2.6.9/apache-cxf-2.6.9/lib/cxf-xjc-runtime-2.6.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/apache-cxf-2.6.9/apache-cxf-2.6.9/lib/cxf-xjc-ts-2.6.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/commons-io-2.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/cxf-bundle-2.6.9.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/DctmImportWebmAutos.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/jaxb-api-2.2.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/jaxws-api-2.2.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/jsr181-api-1.0-MR1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/poi-3.10-FINAL/poi-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/poi-3.10-FINAL/poi-examples-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/poi-3.10-FINAL/poi-excelant-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/poi-3.10-FINAL/poi-ooxml-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/poi-3.10-FINAL/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/poi-3.10-FINAL/poi-scratchpad-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/poi-3.10-FINAL/ooxml-lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/poi-3.10-FINAL/ooxml-lib/stax-api-1.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/poi-3.10-FINAL/ooxml-lib/xmlbeans-2.3.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/poi-3.10-FINAL/lib/commons-codec-1.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/poi-3.10-FINAL/lib/commons-logging-1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/poi-3.10-FINAL/lib/junit-4.11.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/poi-3.10-FINAL/lib/log4j-1.2.13.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jpbrito/Documents/Documentum/Fontes/wksp/Reindex/jars_necessarios pastas/com.emc.ide.external.dfc_1.0.0/lib/dfc.jar"/>
-	<classpathentry kind="lib" path="C:/Documentum"/>
-	<classpathentry kind="lib" path="C:/Documentum/Config"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/dfc/config"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/commons-io-2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/cxf-bundle-2.6.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/jaxb-api-2.2.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/jaxws-api-2.2.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/jsr181-api-1.0-MR1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/com.emc.ide.external.dfc_1.0.0/externaldfc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lvidotti/Desktop/mapfre/Ambinte/binarios/jars_necessarios pastas/com.emc.ide.external.dfc_1.0.0/lib/dfc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
