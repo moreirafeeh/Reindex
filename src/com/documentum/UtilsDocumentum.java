@@ -314,7 +314,7 @@ public class UtilsDocumentum extends conexao_documentum {
 			
 				/// se o params não passar na validação do for o arquivo eh movimentado para outra pasta
 			 if(arquivo.size()==0||arquivo.get(arquivo.size()-1) != objectNameFile){
-				 ConsultarQueryUPDATE(Querys.UPDATE_LINK("/Lucas Vidotti/ParametrosIncorretos",objectNameFile));
+				 ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",objectNameFile));
        			ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/Sinistros Autos/Não Indexados",objectNameFile));
 					
 				}
