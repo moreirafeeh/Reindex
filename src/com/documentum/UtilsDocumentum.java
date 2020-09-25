@@ -139,11 +139,8 @@ public class UtilsDocumentum extends conexao_documentum {
 	
 	//-------------------CONSULTAS DQL--------------------
 	public ArrayList<String> ConsultarQuery(String queryString) throws Exception {
-		
-		System.out.println(getRepositorioDctm());
-		System.out.println(getSessDctm());
-		System.out.println(getUsuarioDctm());
-		
+		System.out.println("PRINT CONSULTAR QUERY");
+		System.out.println(queryString);
 		ArrayList<String> arquivo = new ArrayList<String>();
 		
 		IDfQuery query = new DfQuery();
@@ -174,11 +171,7 @@ public class UtilsDocumentum extends conexao_documentum {
 	
 	
 public boolean ConsultarPasta(String queryString) throws Exception {
-		
-		System.out.println(getRepositorioDctm());
-		System.out.println(getSessDctm());
-		System.out.println(getUsuarioDctm());
-		
+	System.out.println("PRINT CONSULTAR PASTA");
 		IDfQuery query = new DfQuery();
 		
 		query.setDQL(queryString);
@@ -213,11 +206,8 @@ public boolean ConsultarPasta(String queryString) throws Exception {
 	
 	
 	public ArrayList<String> ConsultarQueryData(String queryString) throws Exception {
-		
-		System.out.println(getRepositorioDctm());
-		System.out.println(getSessDctm());
-		System.out.println(getUsuarioDctm());
-		
+		System.out.println("PRINT CONSULTAR QUERY DATA");
+		System.out.println(queryString);
 		ArrayList<String> arquivo = new ArrayList<String>();
 		
 		IDfQuery query = new DfQuery();
@@ -253,10 +243,7 @@ public boolean ConsultarPasta(String queryString) throws Exception {
 	//UPDATE QUERYS----
 	public void ConsultarQueryUPDATE(String queryString) throws Exception {
 			
-			System.out.println(getRepositorioDctm());
-			System.out.println(getSessDctm());
-			System.out.println(getUsuarioDctm());
-			
+			System.out.println(queryString);
 			IDfQuery query = new DfQuery();
 			
 			query.setDQL(queryString);
@@ -278,18 +265,20 @@ public boolean ConsultarPasta(String queryString) throws Exception {
 			
 			IDfQuery query = new DfQuery();
 			
-			query.setDQL(Querys.MoveFileNameNull("Não Indexados"));
+			query.setDQL(Querys.MoveFileNameNull("Nao_Indexados_TESTE"));
 			
 			IDfCollection collNotName = query.execute(getSessDctm(), 0);
-			
+
 			while (collNotName.next()) {
 				
-				
+				System.out.println("ENTREI NA FUNCAO 0");
 				IDfTypedObject typeObject = (IDfTypedObject) collNotName.getTypedObject();
 				
+				System.out.println("========"+typeObject.getString("r_object_id"));
 				
-				ConsultarQueryUPDATE(Querys.UPDATE_LINK_NAME_NULL("/Lucas Vidotti/ParametrosIncorretos",typeObject.getString("r_object_id")));
-				ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_NAME_NULL("/Sinistros Autos/Não Indexados",typeObject.getString("r_object_id")));
+				ConsultarQueryUPDATE(Querys.UPDATE_LINK_NAME_NULL("/teste_pasta_reindex/ParametrosIncorretos",typeObject.getString("r_object_id")));
+				ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_NAME_NULL("/teste_pasta_reindex/Nao_Indexados_TESTE",typeObject.getString("r_object_id")));
+			
 			}
 			
 		}
@@ -315,7 +304,7 @@ public boolean ConsultarPasta(String queryString) throws Exception {
 			IDfCollection coll = query.execute(getSessDctm(), 0);
 
 			while (coll.next()) {
-
+				
 				IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
 
 				String objectNameFile = typeObject.getString("resultado_query");
@@ -340,11 +329,11 @@ public boolean ConsultarPasta(String queryString) throws Exception {
 						}
 					 
 					}
-			
 				/// se o params não passar na validação do for o arquivo eh movimentado para outra pasta
 			 if(arquivo.size()==0||arquivo.get(arquivo.size()-1) != objectNameFile){
+				 System.out.println("ENTREI NO arquivi_SIZE");
 				 ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",objectNameFile,"/teste_pasta_reindex/Nao_Indexados_TESTE"));
-       			ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",objectNameFile));
+				 ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",objectNameFile));
 					
 				}
 

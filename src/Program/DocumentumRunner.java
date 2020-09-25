@@ -73,7 +73,6 @@ public class DocumentumRunner {
 		 	boolean temPasta  = Utils.ConsultarPasta(Querys.PastaExiste("S"+DocumentoSplitado[1]));
 			
 			if(!temPasta){
-				System.out.println("ENTREI AQUIII");
 				//Registro JOAO depende do web service = false ----
 			
 				ArrayList<String> arquivosNaoIndexadosMenos30;
@@ -86,12 +85,12 @@ public class DocumentumRunner {
 				 * Caso não seja encontrado é criado o registro na pasta de 
 				 */
 				arquivosNaoIndexadosMenos30 = Utils.ConsultarQueryData(Querys.ArquivoNaoIndexado30(params));
-				System.out.println("Menos 30");
-				System.out.println(arquivosNaoIndexadosMenos30);
+				//System.out.println("Menos 30");
+				//System.out.println(arquivosNaoIndexadosMenos30);
 				
 				arquivosNaoIndexadosMais60 = Utils.ConsultarQueryData(Querys.ArquivoNaoIndexado60(params));
-				System.out.println("Mais 60");
-				System.out.println(arquivosNaoIndexadosMais60);
+				//System.out.println("Mais 60");
+				//System.out.println(arquivosNaoIndexadosMais60);
 			
 				if(!arquivosNaoIndexadosMenos30.isEmpty()){
 					
@@ -100,6 +99,7 @@ public class DocumentumRunner {
 				    
 				    long diffInMillies = Math.abs(new Date().getTime() - dataDeEntradaDocumento.getTime());
 				    int diasProcessado = (int) (diffInMillies / (1000*60*60*24));
+				    //System.out.println(diasProcessado);
 			    
 				    /*
 				     * Caso o documento tenham sido processados por mais de 30 dias.
@@ -124,8 +124,9 @@ public class DocumentumRunner {
 				     * Passa pelo processo de expurgo caso atinga o sexagésimo dia.
 				    */
 				    if(diasProcessado >= 60){
-				    	Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/expurgo",params, "/teste_pasta_reindex/Nao_Indexados_TESTE"));
+				    	Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/Expurgo",params, "/teste_pasta_reindex/Nao_Indexados_TESTE"));
 				    	Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",params));
+				    	Utils.ConsultarQueryUPDATE(Querys.DELETE(arquivosNaoIndexadosMais60.get(0)));
 				    }
 				}
 			
