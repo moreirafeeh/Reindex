@@ -299,16 +299,7 @@ public class UtilsDocumentum extends conexao_documentum {
 						break;
 					}
 						
-					// valida placa ==
-					 if (param.length() == 7 && param.substring(0, 3).matches("[A-Z]*")) {
-						 arquivo.add(objectNameFile);
-						 break;
-					}
-					// valida expediente ==
-					 if (param.length() == 5 && param.substring(0, 3).matches("[A-Z]*")) {
-							 arquivo.add(objectNameFile);
-							  break;
-					}
+				
 					 
 					}
 			
