@@ -1,4 +1,8 @@
 package com.documentum;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 import com.documentum.fc.client.DfClient;
 import com.documentum.fc.client.IDfClient;
 import com.documentum.fc.client.IDfSession;
@@ -7,21 +11,8 @@ import com.documentum.fc.common.DfException;
 import com.documentum.fc.common.DfLoginInfo;
 import com.documentum.fc.common.IDfLoginInfo;
 
-import com.documentum.com.DfClientX;
-import com.documentum.com.IDfClientX;
-import com.documentum.operations.IDfExportNode;
-import com.documentum.operations.IDfExportOperation;
 
-import com.documentum.fc.client.*;
-import com.documentum.fc.common.*;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.lang.*; 
-import java.util.Properties; 
-
-
-public abstract class conexao_documentum {
+public abstract class ConexaoDocumentum {
 	
 	public IDfSession sessDctm = null;
 	private IDfSessionManager msessDctm = null;
@@ -32,7 +23,7 @@ public abstract class conexao_documentum {
 	private String erroDctm = null;
 	private static Properties props;
 	
-	public conexao_documentum() {
+	public ConexaoDocumentum() {
 		
 		getProp();
 		try {
@@ -61,7 +52,7 @@ public abstract class conexao_documentum {
 		
 	}
 	
-	public conexao_documentum(String Usuario_, String Senha_, String Repositorio_) {
+	public ConexaoDocumentum(String Usuario_, String Senha_, String Repositorio_) {
 		
 		try {
 			clientDctm = DfClient.getLocalClient();

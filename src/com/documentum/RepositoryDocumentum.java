@@ -15,14 +15,16 @@ import com.documentum.fc.client.IDfFolder;
 import com.documentum.fc.client.IDfQuery;
 import com.documentum.fc.client.IDfTypedObject;
 
+import com.documentum.ObjectsParam.Querys;
 
-public class UtilsDocumentum extends conexao_documentum {
+
+public class RepositoryDocumentum extends ConexaoDocumentum {
 	
-	public UtilsDocumentum(){
+	public RepositoryDocumentum(){
 		super();
 	}
 
-	public UtilsDocumentum(String Usuario_, String Senha_, String Repositorio_) {
+	public RepositoryDocumentum(String Usuario_, String Senha_, String Repositorio_) {
 		super(Usuario_, Senha_, Repositorio_);	
 	}
 	
@@ -290,10 +292,9 @@ public boolean ConsultarPasta(String queryString) throws Exception {
 		 * Quebra o object_name com "Split(_)" e faz a validação
 		 * faz a movimentação dos arquivos que não foram validados com UPDATE_LINK e UPDATE_UNLINK
 		 */
-		public ArrayList<String> SrcClear(String queryString) throws Exception {
-			
-			// metodo que faz a limpeza de arquivos com object_name vazio
-			InvalidObjectNameZero(); 
+		public ArrayList<String> BuscaArquivosPasta(String pasta) throws Exception {
+			String queryString = Querys.PastaParaArquivo(pasta);
+			// metodo que faz a limpeza de arquivos com object_name vazio 
 			
 			ArrayList<String> arquivo = new ArrayList<String>();
 
@@ -308,38 +309,10 @@ public boolean ConsultarPasta(String queryString) throws Exception {
 				IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
 
 				String objectNameFile = typeObject.getString("resultado_query");
-
-				String[] params = objectNameFile.split("_");
 				
-				for (String param : params) {
-                    // remove a extensão do arquivo
-						param = FilenameUtils.removeExtension(param);
-						
-						// valida sinistro ==
-						if (param.matches("[0-9]*") && param.length() >= 13) {
-							if (Double.parseDouble(param) > 0 ) {
-								arquivo.add(objectNameFile);
-								break;
-							}
-						}
-						// valida protocolo ==
-						if (param.length() == 17 && Character.toString(param.charAt(14)).matches("[A-Z]*")) {
-							arquivo.add(objectNameFile);
-							break;
-						}
-					 
-					}
-				/// se o params não passar na validação do for o arquivo eh movimentado para outra pasta
-			 if(arquivo.size()==0||arquivo.get(arquivo.size()-1) != objectNameFile){
-				 System.out.println("ENTREI NO arquivi_SIZE");
-				 ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",objectNameFile,"/teste_pasta_reindex/Nao_Indexados_TESTE"));
-				 ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",objectNameFile));
-					
-				}
+				arquivo.add(objectNameFile);
 
 			}
-
-			
 
 			if (coll != null)
 
