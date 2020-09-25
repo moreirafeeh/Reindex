@@ -1,4 +1,4 @@
-package src.com.documentum.ObjectsParam;
+package com.documentum.ObjectsParam;
 
 public class Querys {
 	
@@ -51,8 +51,8 @@ public class Querys {
 		return query;
 	}
 	
-	public static String UPDATE_LINK(String PathSeraLinkado ,String id_arquivo){
-		String query = "update dm_document object link '" + PathSeraLinkado +"' where object_name  ='" + id_arquivo +"'";
+	public static String UPDATE_LINK(String PathSeraLinkado ,String id_arquivo, String PathBusca){
+		String query = "update dm_document object link '" + PathSeraLinkado +"' where object_name  ='" + id_arquivo +"'" + "and FOLDER('" + PathBusca + "')" ;
 		return query;
 		
 	}
@@ -62,6 +62,7 @@ public class Querys {
 		
 		return query;
 	}
+	
 	
 	public static String DELETE(String object_id){
 		String query = "DELETE dm_document objects where r_object_id = '"+object_id+"' enable (RETURN_TOP 1);";
@@ -86,6 +87,12 @@ public class Querys {
 	
 	public static String UPDATE_UNLINK_NAME_NULL(String PathSeraLinkado ,String id_arquivo){
 		String query = "update dm_document object unlink '" + PathSeraLinkado +"' where r_object_id = '" + id_arquivo +"'";
+		return query;
+	}
+	
+	
+	public static String PastaExiste(String Pasta){
+		String query = "select count(object_name) as resultado_query from dm_folder where object_name = '"+ Pasta +"'";
 		return query;
 	}
 	
