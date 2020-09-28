@@ -59,20 +59,25 @@ public class DocumentumRunner {
 					param = FilenameUtils.removeExtension(param);
 					
 					// valida sinistro ==
-					if (param.matches("[0-9]*") && param.length() >= 13) {
+					if (validaSinistro(param)) {
 						if (Double.parseDouble(param) > 0 ) {
 							arquivosNaoIndexados.add(arquivosNaoIndexadosFiltro.get(i));
 							break;
 						}
 					}
 					// valida protocolo ==
-					if (param.length() == 17 && Character.toString(param.charAt(14)).matches("[A-Z]*")) {
+					if (validaProtocolo(param)) {
 						arquivosNaoIndexados.add(arquivosNaoIndexadosFiltro.get(i));
 						break;
 					}
 				}
 			
-			if(arquivosNaoIndexados.size()==0||arquivosNaoIndexados.get(arquivosNaoIndexados.size()-1) != arquivosNaoIndexadosFiltro.get(i)){
+			
+			int tamanhoArray = arquivosNaoIndexados.size();
+			String ultimaPosicaoArray = arquivosNaoIndexados.get(arquivosNaoIndexados.size()-1);
+			
+			
+			if(tamanhoArray==0|| ultimaPosicaoArray != arquivosNaoIndexadosFiltro.get(i)){
 				Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",arquivosNaoIndexadosFiltro.get(i),"/teste_pasta_reindex/Nao_Indexados_TESTE"));
 				Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",arquivosNaoIndexadosFiltro.get(i)));
 			}

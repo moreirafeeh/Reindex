@@ -59,6 +59,7 @@ public class Querys {
 	
 	public static String UPDATE_UNLINK(String PathSeraLinkado ,String id_arquivo){
 		String query = "update dm_document object unlink '" + PathSeraLinkado +"' where object_name ='" + id_arquivo +"'";
+		
 		return query;
 	}
 	
