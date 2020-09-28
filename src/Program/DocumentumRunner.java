@@ -10,6 +10,7 @@ import java.util.Date;
 import org.apache.commons.io.FilenameUtils;
 
 import com.documentum.RepositoryDocumentum;
+import com.documentum.Utils;
 import com.documentum.ObjectsParam.Querys;
 
 //import org.tempuri.CalculatorSoap_CalculatorSoap12_Client;
@@ -24,9 +25,9 @@ public class DocumentumRunner {
 	public static void main(String[] args) throws Exception {
 		
 
-		RepositoryDocumentum Utils = new RepositoryDocumentum();
+		RepositoryDocumentum documentumRepository = new RepositoryDocumentum();
 
-		
+		Utils util = new Utils();
 		
 		//FLUXO REINDEXAÇÂO--------------
 		
@@ -40,9 +41,9 @@ public class DocumentumRunner {
 		/// joga o object_name dos arquivos no array=== 
 		ArrayList<String> arquivosNaoIndexados = new ArrayList<String>();
 		//LIMPAR ARQUIVOS COM NOME NULO-----
-		Utils.InvalidObjectNameZero();
+		documentumRepository.InvalidObjectNameZero();
 				
-		ArrayList<String> arquivosNaoIndexadosFiltro = Utils.BuscaArquivosPasta("/teste_pasta_reindex/Nao_Indexados_TESTE");
+		ArrayList<String> arquivosNaoIndexadosFiltro = documentumRepository.BuscaArquivosPasta("/teste_pasta_reindex/Nao_Indexados_TESTE");
 		
 		
 		//-------------------------------
@@ -59,17 +60,11 @@ public class DocumentumRunner {
 					param = FilenameUtils.removeExtension(param);
 					
 					// valida sinistro ==
-					if (validaSinistro(param)) {
-						if (Double.parseDouble(param) > 0 ) {
+					if (util.validaSinistro(param)||util.validaProtocolo(param)) {
 							arquivosNaoIndexados.add(arquivosNaoIndexadosFiltro.get(i));
 							break;
-						}
 					}
-					// valida protocolo ==
-					if (validaProtocolo(param)) {
-						arquivosNaoIndexados.add(arquivosNaoIndexadosFiltro.get(i));
-						break;
-					}
+					
 				}
 			
 			
@@ -78,8 +73,8 @@ public class DocumentumRunner {
 			
 			
 			if(tamanhoArray==0|| ultimaPosicaoArray != arquivosNaoIndexadosFiltro.get(i)){
-				Utils.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",arquivosNaoIndexadosFiltro.get(i),"/teste_pasta_reindex/Nao_Indexados_TESTE"));
-				Utils.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",arquivosNaoIndexadosFiltro.get(i)));
+				documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",arquivosNaoIndexadosFiltro.get(i),"/teste_pasta_reindex/Nao_Indexados_TESTE"));
+				documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",arquivosNaoIndexadosFiltro.get(i)));
 			}
 			i = i + 1;
 		}
