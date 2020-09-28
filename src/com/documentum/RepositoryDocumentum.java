@@ -4,18 +4,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.apache.commons.io.FilenameUtils;
-
 import com.documentum.ObjectsParam.Querys;
-
 import com.documentum.fc.client.DfQuery;
 import com.documentum.fc.client.IDfCollection;
 import com.documentum.fc.client.IDfDocument;
 import com.documentum.fc.client.IDfFolder;
 import com.documentum.fc.client.IDfQuery;
 import com.documentum.fc.client.IDfTypedObject;
-
-import com.documentum.ObjectsParam.Querys;
 
 
 public class RepositoryDocumentum extends ConexaoDocumentum {
@@ -310,38 +305,8 @@ public boolean ConsultarPasta(String queryString) throws Exception {
 
 				String objectNameFile = typeObject.getString("resultado_query");
 				
-
-				for (String param : params) {
-                    // remove a extensão do arquivo
-					param = FilenameUtils.removeExtension(param);
-					
-					// valida sinistro ==
-					if (param.matches("[0-9]*") && param.length() >= 13) {
-						if (Double.parseDouble(param) > 0 ) {
-							arquivo.add(objectNameFile);
-							break;
-						}
-					}
-					// valida protocolo ==
-					if (param.length() == 17 && Character.toString(param.charAt(14)).matches("[A-Z]*")) {
-						arquivo.add(objectNameFile);
-						break;
-					}
-						
-				
-					 
-					}
-			
-				/// se o params não passar na validação do for o arquivo eh movimentado para outra pasta
-			 if(arquivo.size()==0||arquivo.get(arquivo.size()-1) != objectNameFile){
-				 ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",objectNameFile));
-       			ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/Sinistros Autos/Não Indexados",objectNameFile));
-					
-				}
-
 				arquivo.add(objectNameFile);
-
-
+				
 			}
 
 			if (coll != null)
