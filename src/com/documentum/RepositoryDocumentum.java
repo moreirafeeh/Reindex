@@ -310,7 +310,7 @@ public boolean ConsultarPasta(String queryString) throws Exception {
 
 				String objectNameFile = typeObject.getString("resultado_query");
 				
-<<<<<<< HEAD:src/com/documentum/UtilsDocumentum.java
+
 				for (String param : params) {
                     // remove a extensão do arquivo
 					param = FilenameUtils.removeExtension(param);
@@ -338,9 +338,9 @@ public boolean ConsultarPasta(String queryString) throws Exception {
        			ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/Sinistros Autos/Não Indexados",objectNameFile));
 					
 				}
-=======
+
 				arquivo.add(objectNameFile);
->>>>>>> b5e832ef8efe4ce37e267be67589a7023bb06ba7:src/com/documentum/RepositoryDocumentum.java
+
 
 			}
 
@@ -351,6 +351,29 @@ public boolean ConsultarPasta(String queryString) throws Exception {
 			return arquivo;
 
 		}
+		
+		
+		
+		
+		public boolean validaSinistro(param){
+			
+			if (param.matches("[0-9]*") && param.length() >= 13) {
+				if (Double.parseDouble(param) > 0 ) {
+					arquivosNaoIndexados.add(arquivosNaoIndexadosFiltro.get(i));
+					break;
+				}
+			}
+			
+		}
+		
+		
+		public boolean validaProtocolo(param){
+			if (param.length() == 17 && Character.toString(param.charAt(14)).matches("[A-Z]*")) {
+				arquivosNaoIndexados.add(arquivosNaoIndexadosFiltro.get(i));
+				break;
+			}
+		}
+		
 		
 		
 }
