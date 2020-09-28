@@ -132,7 +132,6 @@ public class DocumentumRunner {
 				if(arquivosNaoIndexadosMenos30.isEmpty() && arquivosNaoIndexadosMais60.isEmpty()){
 					documentumRepository.createObject(params, "date_nao_indexado_30", "", "", "/teste_pasta_reindex/Menos30");
 				}
-			
 			}
 			
 			else{
