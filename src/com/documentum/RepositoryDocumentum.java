@@ -354,26 +354,7 @@ public boolean ConsultarPasta(String queryString) throws Exception {
 		
 		
 		
-		
-		public boolean validaSinistro(param){
-			
-			if (param.matches("[0-9]*") && param.length() >= 13) {
-				if (Double.parseDouble(param) > 0 ) {
-					arquivosNaoIndexados.add(arquivosNaoIndexadosFiltro.get(i));
-					break;
-				}
-			}
-			
-		}
-		
-		
-		public boolean validaProtocolo(param){
-			if (param.length() == 17 && Character.toString(param.charAt(14)).matches("[A-Z]*")) {
-				arquivosNaoIndexados.add(arquivosNaoIndexadosFiltro.get(i));
-				break;
-			}
-		}
-		
+	
 		
 		
 }
