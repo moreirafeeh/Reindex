@@ -105,53 +105,8 @@ public class ReindexaPage {
 			
 			
 			if(!temPasta){
-				//Registro JOAO depende do web service = false ----
-			
-				ArrayList<String> arquivosNaoIndexadosMenos30;
-				ArrayList<String> arquivosNaoIndexadosMais60;
 				
-				/*
-				 * Para cada arquivo que passou o filtro de arquivos fora do padrão
-				 * e validado se o arquivo está registrado em uma das pastas.
-				 * Caso não seja encontrado é criado o registro na pasta de 
-				 */
-				arquivosNaoIndexadosMenos30 = documentumRepository.ConsultarQueryData(Querys.ArquivoNaoIndexado30(params));
-				arquivosNaoIndexadosMais60 = documentumRepository.ConsultarQueryData(Querys.ArquivoNaoIndexado60(params));
-			
-				if(!arquivosNaoIndexadosMenos30.isEmpty()){
-					
-					int diasProcessado  = util.diasProcessados(arquivosNaoIndexadosMenos30.get(2).split(" ")[0]);
-			    
-				    /*
-				     * Caso o documento tenham sido processados por mais de 30 dias.
-				     * Passa pelo processo de mudança de pasta caso atinga o trigésimo dia.
-				    */
-				    if(diasProcessado >= 31){
-				    	documentumRepository.ConsultarQueryUPDATE(Querys.DELETE(arquivosNaoIndexadosMenos30.get(0)));
-				    	documentumRepository.createObject(params, "date_nao_indexado_60", "", "", "/teste_pasta_reindex/Mais60",arquivosNaoIndexadosMenos30.get(2).split(" ")[0]);
-				    }  
-				}
-			
-				if(!arquivosNaoIndexadosMais60.isEmpty()){
-					
-					int diasProcessado  = util.diasProcessados(arquivosNaoIndexadosMais60.get(2).split(" ")[0]);
-				    
-				    /*
-				     * Caso o documento tenham sido processados por mais de 60 dias.
-				     * Passa pelo processo de expurgo caso atinga o sexagésimo dia.
-				    */
-				    if(diasProcessado >= 60){
-				    	documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/Expurgo",params, "/teste_pasta_reindex/Nao_Indexados_TESTE"));
-				    	documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",params));
-				    	documentumRepository.ConsultarQueryUPDATE(Querys.DELETE(arquivosNaoIndexadosMais60.get(0)));
-				    }
-				}
-			
-				if(arquivosNaoIndexadosMenos30.isEmpty() && arquivosNaoIndexadosMais60.isEmpty()){
-					documentumRepository.createObject(params, "date_nao_indexado_30", "", "", "/teste_pasta_reindex/Menos30");
-				}
 			}
-			
 			else{
 				documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/S"+ DocumentoSplitado[1] + "/TRC03",params, "/teste_pasta_reindex/Nao_Indexados_TESTE"));
 				documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",params));
@@ -163,9 +118,59 @@ public class ReindexaPage {
 			}
 			
 			
+		}	
+	}
+	
+	
+public void controleDePastas(String params){
+		
+		//Registro JOAO depende do web service = false ----
+		
+		ArrayList<String> arquivosNaoIndexadosMenos30;
+		ArrayList<String> arquivosNaoIndexadosMais60;
+		
+		/*
+		 * Para cada arquivo que passou o filtro de arquivos fora do padrão
+		 * e validado se o arquivo está registrado em uma das pastas.
+		 * Caso não seja encontrado é criado o registro na pasta de 
+		 */
+		arquivosNaoIndexadosMenos30 = documentumRepository.ConsultarQueryData(Querys.ArquivoNaoIndexado30(params));
+		arquivosNaoIndexadosMais60 = documentumRepository.ConsultarQueryData(Querys.ArquivoNaoIndexado60(params));
+	
+		if(!arquivosNaoIndexadosMenos30.isEmpty()){
+			
+			int diasProcessado  = util.diasProcessados(arquivosNaoIndexadosMenos30.get(2).split(" ")[0]);
+	    
+		    /*
+		     * Caso o documento tenham sido processados por mais de 30 dias.
+		     * Passa pelo processo de mudança de pasta caso atinga o trigésimo dia.
+		    */
+		    if(diasProcessado >= 31){
+		    	documentumRepository.ConsultarQueryUPDATE(Querys.DELETE(arquivosNaoIndexadosMenos30.get(0)));
+		    	documentumRepository.createObject(params, "date_nao_indexado_60", "", "", "/teste_pasta_reindex/Mais60",arquivosNaoIndexadosMenos30.get(2).split(" ")[0]);
+		    }  
 		}
-		
-		
+	
+		if(!arquivosNaoIndexadosMais60.isEmpty()){
+			
+			int diasProcessado  = util.diasProcessados(arquivosNaoIndexadosMais60.get(2).split(" ")[0]);
+		    
+		    /*
+		     * Caso o documento tenham sido processados por mais de 60 dias.
+		     * Passa pelo processo de expurgo caso atinga o sexagésimo dia.
+		    */
+		    if(diasProcessado >= 60){
+		    	documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/Expurgo",params, "/teste_pasta_reindex/Nao_Indexados_TESTE"));
+		    	documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",params));
+		    	documentumRepository.ConsultarQueryUPDATE(Querys.DELETE(arquivosNaoIndexadosMais60.get(0)));
+		    }
+		}
+	
+		if(arquivosNaoIndexadosMenos30.isEmpty() && arquivosNaoIndexadosMais60.isEmpty()){
+			documentumRepository.createObject(params, "date_nao_indexado_30", "", "", "/teste_pasta_reindex/Menos30");
+		}
 	}
 		
+		
 }
+
