@@ -107,6 +107,7 @@ public class ReindexaPage {
 			if(!temPasta){
 				
 			}
+			
 			else{
 				documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/S"+ DocumentoSplitado[1] + "/TRC03",params, "/teste_pasta_reindex/Nao_Indexados_TESTE"));
 				documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",params));
@@ -121,9 +122,7 @@ public class ReindexaPage {
 		}	
 	}
 	
-	
-public void controleDePastas(String params){
-		
+	public void controleDePastas(String params){
 		//Registro JOAO depende do web service = false ----
 		
 		ArrayList<String> arquivosNaoIndexadosMenos30;
@@ -134,7 +133,9 @@ public void controleDePastas(String params){
 		 * e validado se o arquivo está registrado em uma das pastas.
 		 * Caso não seja encontrado é criado o registro na pasta de 
 		 */
-		arquivosNaoIndexadosMenos30 = documentumRepository.ConsultarQueryData(Querys.ArquivoNaoIndexado30(params));
+		try {
+			arquivosNaoIndexadosMenos30 = documentumRepository.ConsultarQueryData(Querys.ArquivoNaoIndexado30(params));
+		 
 		arquivosNaoIndexadosMais60 = documentumRepository.ConsultarQueryData(Querys.ArquivoNaoIndexado60(params));
 	
 		if(!arquivosNaoIndexadosMenos30.isEmpty()){
@@ -169,8 +170,11 @@ public void controleDePastas(String params){
 		if(arquivosNaoIndexadosMenos30.isEmpty() && arquivosNaoIndexadosMais60.isEmpty()){
 			documentumRepository.createObject(params, "date_nao_indexado_30", "", "", "/teste_pasta_reindex/Menos30");
 		}
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 		
-		
 }
-
