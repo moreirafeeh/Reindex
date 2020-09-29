@@ -30,8 +30,8 @@ public class Reindexacao {
 			array = this.documentumRepository.BuscaArquivosPasta("/teste_pasta_reindex/Nao_Indexados_TESTE");
 
 		} catch (Exception e) {
+			System.out.println("Erro ao buscar arquivos.");
 			e.printStackTrace();
-			System.out.println("Erro ao buscar arquivos");
 		} finally {
 			return array;
 		}
@@ -49,17 +49,16 @@ public class Reindexacao {
 		ArrayList<String> arquivosNaoIndexados = new ArrayList<String>();
 
 		int i = 0;
-		// System.out.println(arquivosNaoIndexadosFiltro.size());
 		while (i < arquivosNaoIndexadosFiltro.size()) {
 			System.out.println(i);
 
 			String[] params = arquivosNaoIndexadosFiltro.get(i).split("_");
 
 			for (String param : params) {
-				// remove a extensão do arquivo
+				// Remove a extensão do arquivo.
 				param = FilenameUtils.removeExtension(param);
 
-				// valida sinistro ==
+				// Validação de Sinistro e Protocolo
 				if (util.validaSinistro(param) || util.validaProtocolo(param)) {
 					arquivosNaoIndexados.add(arquivosNaoIndexadosFiltro.get(i));
 					break;
@@ -67,6 +66,7 @@ public class Reindexacao {
 
 			}
 
+			//Caso o arquivo não seja adicionado na lista de arquivos valido ele é enviado pra arquivos de parametros invalidos.
 			if (arquivosNaoIndexados.size() > 0) {
 				String ultimaPosicaoArray = arquivosNaoIndexados
 						.get(arquivosNaoIndexados.size() - 1);
@@ -152,7 +152,7 @@ public class Reindexacao {
 				}
 
 			} catch (Exception e) {
-				
+				System.err.println("Erro na movimentação do arquivos em pastas.");
 				e.printStackTrace();
 			}
 
@@ -189,8 +189,7 @@ public class Reindexacao {
 
 				/*
 				 * Caso o documento tenham sido processados por mais de 30 dias.
-				 * Passa pelo processo de mudança de pasta caso atinga o
-				 * trigésimo dia.
+				 * Passa pelo processo de mudança de pasta caso atinga o trigésimo dia.
 				 */
 				if (diasProcessado >= 31) {
 					documentumRepository.ConsultarQueryUPDATE(Querys
@@ -215,17 +214,23 @@ public class Reindexacao {
 				if (diasProcessado >= 60) {
 					documentumRepository
 							.ConsultarQueryUPDATE(Querys.UPDATE_LINK(
-									"/teste_pasta_reindex/Expurgo", arquivosSemPasta,
-									"/teste_pasta_reindex/Nao_Indexados_TESTE"));
+									"/teste_pasta_reindex/Expurgo",  //Pasta de destino do arquivo.
+									arquivosSemPasta, //Nome do arquivo.
+									"/teste_pasta_reindex/Nao_Indexados_TESTE" //Pasta de origem do arquivo.
+									)); 
 					documentumRepository.ConsultarQueryUPDATE(Querys
 							.UPDATE_UNLINK(
-									"/teste_pasta_reindex/Nao_Indexados_TESTE",
-									arquivosSemPasta));
-					documentumRepository.ConsultarQueryUPDATE(Querys
-							.DELETE(arquivosNaoIndexadosMais60.get(0)));
+									"/teste_pasta_reindex/Nao_Indexados_TESTE", //Pasta de origem do arquivo.
+									arquivosSemPasta //Nome do arquivo.
+									));
+					documentumRepository.ConsultarQueryUPDATE(Querys //Apagando o objeto de cocntrole da pasta de 60 dias.
+							.DELETE(arquivosNaoIndexadosMais60.get(0))); 
 				}
 			}
-
+			
+			/*
+			 * Criação do objeto de controle, inicialmente na pasta de 30 dias.
+			 */
 			if (arquivosNaoIndexadosMenos30.isEmpty()
 					&& arquivosNaoIndexadosMais60.isEmpty()) {
 				documentumRepository.createPasta30(arquivosSemPasta,
@@ -233,7 +238,7 @@ public class Reindexacao {
 						"/teste_pasta_reindex/Menos30");
 			}
 		} catch (Exception e) {
-			
+			System.err.println("Erro no controle do tempo de vida do arquivo.");
 			e.printStackTrace();
 		}
 	}
