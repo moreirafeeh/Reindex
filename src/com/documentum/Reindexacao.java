@@ -128,9 +128,10 @@ public class Reindexacao {
 
 			String[] DocumentoSplitado = params.split("_");
 
-			// QName SERVICE_NAME = new QName("http://tempuri.org/",
-			// "Calculator");
+			//			CHAMADA ENDPOINT PARA VALIDAÇÃO DE DADOS.
+			// QName SERVICE_NAME = new QName("http://tempuri.org/","Calculator");
 			// CalculatorSoap_CalculatorSoap12_Client.SOAP_TESTE(args);// params
+			
 			boolean temPasta;
 			try {
 				temPasta = documentumRepository.ConsultarPasta(Querys
