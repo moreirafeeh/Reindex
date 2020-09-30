@@ -1,8 +1,11 @@
 package com.documentum;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Utils {
 
-	
 	
 	public boolean validaSinistro(String param){
 		if (param.matches("[0-9]*") && param.length() >= 13) {
@@ -22,7 +25,17 @@ public class Utils {
 	}
 	
 	
-	
+	public int diasProcessados(String dataDocumento) {
+		int diasProcessado = 0;
+		try {
+			Date dataDeEntradaDocumento = new SimpleDateFormat("dd/MM/yyyy").parse(dataDocumento);
+			long diffInMillies = Math.abs(new Date().getTime() - dataDeEntradaDocumento.getTime());
+			diasProcessado = (int) (diffInMillies / (1000*60*60*24));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return diasProcessado;      
+	}
 	
 	
 }
