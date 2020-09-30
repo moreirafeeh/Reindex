@@ -78,7 +78,7 @@ public class DocumentumRunner {
 			}
 			i = i + 1;
 		}
-		System.out.println(arquivosNaoIndexados);
+		
 //--------------------------------------------
 		
 		///--------------------------------------------------------------------
