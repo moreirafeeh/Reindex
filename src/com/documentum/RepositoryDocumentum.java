@@ -12,6 +12,7 @@ import com.documentum.fc.client.IDfDocument;
 import com.documentum.fc.client.IDfFolder;
 import com.documentum.fc.client.IDfQuery;
 import com.documentum.fc.client.IDfTypedObject;
+import com.documentum.fc.common.DfException;
 
 public class RepositoryDocumentum extends ConexaoDocumentum {
 
@@ -24,9 +25,11 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 		super(Usuario_, Senha_, Repositorio_);
 	}
 
+
 	/**
 	 * @since 29/09/2020
-	 * @param Cabinet_name: Nome do Cabinet que será criado
+	 * @param Cabinet_name
+	 *            : Nome do Cabinet que será criado
 	 */
 	public void createCabinet(String Cabinet_name) throws Exception {
 
@@ -42,10 +45,13 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 		}
 
 	}
+
 	/**
 	 * @since 29/09/2020
-	 * @param Cabinet_link: Path do Documentum onde será criada a pasta.
-	 * @param folder_name: nome da pasta no documentum.  
+	 * @param Cabinet_link
+	 *            : Path do Documentum onde será criada a pasta.
+	 * @param folder_name
+	 *            : nome da pasta no documentum.
 	 */
 	public void createFolder(String Cabinet_link, String folder_name)
 			throws Exception {
@@ -71,10 +77,14 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 
 	/**
 	 * @since 29/09/2020
-	 * @param Nome_doc: nome do Documento.
-	 * @param tipo_conteudo: tipo do documento(txt,PDF etc..). tipo - crtext...
-	 * @param path_conteudo: path onde o documento está localizado em sua maquina.
-	 * @param documentum_path: path no documentum de onde será disponibilizado o arquivo. 
+	 * @param Nome_doc
+	 *            : nome do Documento.
+	 * @param tipo_conteudo
+	 *            : tipo do documento(txt,PDF etc..). tipo - crtext...
+	 * @param path_conteudo
+	 *            : path onde o documento está localizado em sua maquina.
+	 * @param documentum_path
+	 *            : path no documentum de onde será disponibilizado o arquivo.
 	 * 
 	 */
 	public IDfDocument createDocument(String Nome_doc, String tipo_conteudo,
@@ -100,15 +110,21 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 		return document;
 
 	}
-	
+
 	/**
 	 * Este Método permite qualquer criacao de Objeto
+	 * 
 	 * @since 29/09/2020
-	 * @param Nome_doc: nome do Documento.
-	 * @param doc_type: tipo do documento(Objeto documentum) 
-	 * @param tipo_conteudo: tipo do conteudo(crtext e etc).
-	 * @param path_conteudo: path no documentum de onde será disponibilizado o arquivo.
-	 * @param documentum_path: path no documentum de onde será disponibilizado o arquivo.
+	 * @param Nome_doc
+	 *            : nome do Documento.
+	 * @param doc_type
+	 *            : tipo do documento(Objeto documentum)
+	 * @param tipo_conteudo
+	 *            : tipo do conteudo(crtext e etc).
+	 * @param path_conteudo
+	 *            : path no documentum de onde será disponibilizado o arquivo.
+	 * @param documentum_path
+	 *            : path no documentum de onde será disponibilizado o arquivo.
 	 */
 	public IDfDocument createPasta30(String Nome_doc, String doc_type,
 			String tipo_conteudo, String path_conteudo, String documentum_path)
@@ -136,14 +152,21 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 		return document;
 
 	}
+
 	/**
 	 * Este Método permite qualquer criacao de Objeto
+	 * 
 	 * @since 29/09/2020
-	 * @param Nome_doc: nome do Documento.
-	 * @param doc_type: tipo do documento(Objeto documentum) 
-	 * @param tipo_conteudo: tipo do conteudo(crtext e etc).
-	 * @param path_conteudo: path no documentum de onde será disponibilizado o arquivo.
-	 * @param documentum_path: path no documentum de onde será disponibilizado o arquivo.
+	 * @param Nome_doc
+	 *            : nome do Documento.
+	 * @param doc_type
+	 *            : tipo do documento(Objeto documentum)
+	 * @param tipo_conteudo
+	 *            : tipo do conteudo(crtext e etc).
+	 * @param path_conteudo
+	 *            : path no documentum de onde será disponibilizado o arquivo.
+	 * @param documentum_path
+	 *            : path no documentum de onde será disponibilizado o arquivo.
 	 */
 	public IDfDocument createPasta60(String Nome_doc, String doc_type,
 			String tipo_conteudo, String path_conteudo, String documentum_path,
@@ -168,10 +191,13 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 		return document;
 
 	}
+
 	/**
 	 * Este Método faz uma consulta DQL no Documentum
+	 * 
 	 * @since 29/09/2020
-	 * @param queryString: recebe uma Query DQL.
+	 * @param queryString
+	 *            : recebe uma Query DQL.
 	 */
 	// -------------------CONSULTAS DQL--------------------
 	public ArrayList<String> ConsultarQuery(String queryString)
@@ -209,11 +235,13 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 		return arquivo;
 
 	}
-	
+
 	/**
 	 * Este Método faz uma consulta DQL no Documentum
+	 * 
 	 * @since 29/09/2020
-	 * @param queryString: recebe uma Query DQL pré-selecionada.
+	 * @param queryString
+	 *            : recebe uma Query DQL pré-selecionada.
 	 */
 	public boolean ConsultarPasta(String queryString) throws Exception {
 		System.out.println("PRINT CONSULTAR PASTA");
@@ -250,11 +278,13 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 		return pastaExiste;
 
 	}
-	
+
 	/**
 	 * Este Método faz uma consulta DQL no Documentum
+	 * 
 	 * @since 29/09/2020
-	 * @param queryString: recebe uma Query DQL pré-selecionada.
+	 * @param queryString
+	 *            : recebe uma Query DQL pré-selecionada.
 	 */
 	public ArrayList<String> ConsultarQueryData(String queryString)
 			throws Exception {
@@ -298,8 +328,10 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 
 	/**
 	 * Este Método faz um UPDATE DQL no Documentum
+	 * 
 	 * @since 29/09/2020
-	 * @param queryString: recebe uma Query DQL pré-selecionada(classe Queryes).
+	 * @param queryString
+	 *            : recebe uma Query DQL pré-selecionada(classe Queryes).
 	 */
 	public void ConsultarQueryUPDATE(String queryString) throws Exception {
 
@@ -313,8 +345,9 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 	}
 
 	/**
-	 * Este Método verifica se existem nomes Nulos nos arquivos.
-	 * Se tiver nomes nulos, move para pasta "Parametros Incorretos". 
+	 * Este Método verifica se existem nomes Nulos nos arquivos. Se tiver nomes
+	 * nulos, move para pasta "Parametros Incorretos".
+	 * 
 	 * @since 29/09/2020
 	 */
 	public void InvalidObjectNameZero() throws Exception {
@@ -347,7 +380,10 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 
 	/**
 	 * Metodo faz uma query e Atribui o object_name ao Array
-	 * @param String pasta: Path da pasta onde será buscado os arquivos no Documentum  
+	 * 
+	 * @param String
+	 *            pasta: Path da pasta onde será buscado os arquivos no
+	 *            Documentum
 	 */
 	public ArrayList<String> BuscaArquivosPasta(String pasta) throws Exception {
 		String queryString = Querys.PastaParaArquivo(pasta);
@@ -375,6 +411,141 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 			coll.close();
 
 		return arquivo;
+
+	}
+
+	/**
+	 * Este metodo é responsavel por fazer uma consulta qdl.
+	 * 
+	 * 
+	 * @param String
+	 *            recebe numero de sinistro do WSDL
+	 * 
+	 */
+
+	public int pastaSinistro(String Sinistro) throws DfException {
+		String queryString = Querys.PastaExiste(Sinistro);
+		int folderExiste = 0;
+		IDfQuery query = new DfQuery();
+
+		query.setDQL(queryString);
+
+		IDfCollection coll = query.execute(getSessDctm(), 0);
+
+		while (coll.next()) {
+
+			IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
+
+			folderExiste = typeObject.getInt("resultado_query");
+
+		}
+
+		if (coll != null)
+
+			coll.close();
+
+		return folderExiste;
+
+	}
+
+	/**
+	 * Este metodo é responsavel por fazer uma consulta qdl.
+	 * 
+	 * 
+	 * @param String
+	 *            recebe numero de expediente do WSDL
+	 * 
+	 * 
+	 */
+
+	public int pastaExpediente(String sinistro) throws DfException {
+		String queryString = Querys.PastaExisteExpediente(sinistro);
+		int folderExiste = 0;
+		IDfQuery query = new DfQuery();
+
+		query.setDQL(queryString);
+
+		IDfCollection coll = query.execute(getSessDctm(), 0);
+
+		while (coll.next()) {
+
+			IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
+
+			folderExiste = typeObject.getInt("resultado_query");
+
+		}
+
+		if (coll != null)
+
+			coll.close();
+
+		return folderExiste;
+
+	}
+
+	/**
+	 * Este metodo é responsavel por validar a existencia da pasta sinistro
+	 * 
+	 * 
+	 * @param String
+	 *            recebe numero de sinistro do WSDL
+	 * 
+	 * 
+	 */
+
+	public boolean validaPastaSinistro(String sinistro) throws DfException {
+
+		boolean valido = false;
+		if (pastaSinistro(sinistro) == 1) {
+
+			valido = true;
+		}
+
+		return valido;
+	}
+
+	/**
+	 * Este metodo é responsavel por validar a existencia da pasta expediente
+	 * 
+	 * 
+	 * @param String
+	 *            recebe numero de sinistro do WSDL
+	 * 
+	 * 
+	 */
+
+	public boolean validaPastaExpediente(String sinistro) throws DfException {
+
+		boolean valido = false;
+		if (pastaExpediente(sinistro) == 1) {
+
+			valido = true;
+		}
+
+		return valido;
+
+	}
+
+	/**
+	 * Este metodo é responsavel por criar pasta
+	 * 
+	 * 
+	 * @param String
+	 *            : nome da pasta, path da pasta
+	 * 
+	 * 
+	 * 
+	 */
+	public void criarPasta(String nomeFolder, String pathFolderCabinet)
+			throws DfException {
+
+		IDfFolder folder = (IDfFolder) getSessDctm().newObject("dm_folder");
+
+		folder.setObjectName(nomeFolder);
+
+		folder.link(pathFolderCabinet);
+
+		folder.save();
 
 	}
 

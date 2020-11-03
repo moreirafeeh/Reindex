@@ -93,10 +93,15 @@ public class Querys {
 	
 	public static String PastaExiste(String Pasta){
 		String query = "select count(object_name) as resultado_query from dm_folder where object_name = '"+ Pasta +"'";
+		
 		return query;
 	}
 	
-	
+	public static String PastaExisteExpediente(String sinistro){
+
+		String query = "select count(object_name) as resultado_query  from  dm_folder where FOLDER('/teste_pasta_reindex/"+sinistro+"')";
+		return query;
+	}
 	
 	
 	
