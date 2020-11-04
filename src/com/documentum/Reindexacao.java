@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.commons.io.FilenameUtils;
 
 import com.documentum.ObjectsParam.Querys;
+import com.documentum.operations.impl.common.query.Query;
 import com.documentum.RepositoryDocumentum;
 import com.documentum.Utils;
 
@@ -37,7 +38,6 @@ public class Reindexacao {
 		}
 
 	}
-	
 	
 	/**
 	 * Este Método é responsavel por filtrar os arquivos da pasta "Não Indexados" com parametros incorretos.

@@ -377,5 +377,7 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 		return arquivo;
 
 	}
+	
+	
 
 }

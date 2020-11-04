@@ -96,6 +96,42 @@ public class Querys {
 		return query;
 	}
 	
+	public static String CriarTabelaBanco(String NomeTabela){
+		String query = "EXECUTE exec_sql with query='create table" + NomeTabela + "(id_arquivo varchar(200),nome_arquivo varchar(200) , data_entrada varchar(20))'";
+		System.out.println(query);
+		return query;
+	}
+	
+	//Quando se cria uma tabela registrada é necessário primeiro executar o método "CriarTabelaBanco"
+	//Em seguida criarTabelaRegistrada com o mesmo no da tabela no banco
+	public static String CriarTabelaRegistrada(String NomeTabela){
+		String query = "REGISTER TABLE dm_dbo." + NomeTabela + "(id_arquivo STRING(200), nome_arquivo STRING(200), data_entrada STRING(20))  KEY (id_arquivo)SYNONYM 'tabela controle ids'";
+		System.out.println(query);
+		return query;
+	}
+	
+	public static String inserirValoresTabelaRegistrada(String id_arquivo,String nome_arquivo, String data_entrada){
+		String query = "INSERT INTO dm_dbo.TabelaReindexacao (id_arquivo, nome_arquivo, data_entrada) VALUES ( '"+ id_arquivo +"' ,' " + nome_arquivo + "', '" + data_entrada + " ')";
+		System.out.println(query);
+		return query;
+	}
+	
+	public static String updateTabelaRegistrada(String atributoDesejaMudar,String valorDaAlteracao, String id_arquivoWHERE){
+		String query = "UPDATE dm_dbo.TabelaReindexacao SET " + atributoDesejaMudar + "= '" + valorDaAlteracao +"' WHERE id_arquivo = '" + id_arquivoWHERE + "';";
+		System.out.println(query);
+		return query;
+	}
+	
+	public static String deleteValorTabelaRegistrada(String idArquivoSeraDeletado){
+		String query = "DELETE from dm_dbo.TabelaReindexacao Where id_arquivo = '" + idArquivoSeraDeletado +"'";
+		System.out.println(query);
+		return query;
+	}
+	
+	
+	
+	
+	
 	
 	
 	
