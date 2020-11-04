@@ -1,11 +1,21 @@
 package com.documentum;
 
+import java.awt.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+
+import com.documentum.fc.client.IDfDocument;
 
 public class Utils {
 
+	
+	
+	
+	
+	
+	
 	
 	public boolean validaSinistro(String param){
 		if (param.matches("[0-9]*") && param.length() >= 13) {

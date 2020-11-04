@@ -1,6 +1,7 @@
 package Program;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,13 +11,14 @@ import com.documentum.fc.client.IDfDocument;
 import com.documentum.fc.common.DfException;
 import com.documentum.ObjectsParam.Querys;
 
-//import org.tempuri.CalculatorSoap_CalculatorSoap12_Client;
+
 
 public class DocumentumRunner {
 
 	public static void main(String[] args) throws Exception {
-		//--------------------INSTANCIAS-----------------------
+		// --------------------INSTANCIAS-----------------------
 		RepositoryDocumentum documentumRepository = new RepositoryDocumentum();
+
 		Reindexacao reindexacao = new Reindexacao(documentumRepository);  
 		//-----------------------------------------------------
 		
@@ -39,3 +41,4 @@ public class DocumentumRunner {
 	
 	
 }		
+
