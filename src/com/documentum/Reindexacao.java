@@ -37,8 +37,7 @@ public class Reindexacao {
 		ArrayList<String> array = new ArrayList<String>();
 
 		try {
-			array = this.documentumRepository
-					.BuscaArquivosPasta("/teste_pasta_reindex/Nao_Indexados_TESTE");
+			array = this.documentumRepository.BuscaArquivosPasta("/teste_pasta_reindex/Nao_Indexados_TESTE");
 
 		} catch (Exception e) {
 			System.out.println("Erro ao buscar arquivos.");
@@ -48,6 +47,40 @@ public class Reindexacao {
 		}
 
 	}
+	
+	@SuppressWarnings("finally")
+	public ArrayList<String> BuscaPastaID() {
+		ArrayList<String> array = new ArrayList<String>();
+
+		try {
+			array = this.documentumRepository.BuscaArquivosPastaID();
+
+		} catch (Exception e) {
+			System.out.println("Erro ao buscar arquivos.");
+			e.printStackTrace();
+		} finally {
+			return array;
+		}
+
+	}
+	
+	@SuppressWarnings("finally")
+	public ArrayList<String> BuscaRegistroID() {
+		ArrayList<String> array = new ArrayList<String>();
+
+		try {
+			array = this.documentumRepository.BuscaArquivosPastaID();
+
+		} catch (Exception e) {
+			System.out.println("Erro ao buscar arquivos.");
+			e.printStackTrace();
+		} finally {
+			return array;
+		}
+	}
+	
+	
+	
 
 	/**
 	 * Este Método é responsavel por filtrar os arquivos da pasta
@@ -55,8 +88,7 @@ public class Reindexacao {
 	 * 
 	 * @since 29/09/2020
 	 */
-	public ArrayList<String> filtrarArquivos(
-			ArrayList<String> arquivosNaoIndexadosFiltro) {
+	public ArrayList<String> filtrarArquivos(ArrayList<String> arquivosNaoIndexadosFiltro) {
 
 		ArrayList<String> arquivosNaoIndexados = new ArrayList<String>();
 
@@ -81,41 +113,20 @@ public class Reindexacao {
 			// Caso o arquivo não seja adicionado na lista de arquivos valido
 			// ele é enviado pra arquivos de parametros invalidos.
 			if (arquivosNaoIndexados.size() > 0) {
-				String ultimaPosicaoArray = arquivosNaoIndexados
-						.get(arquivosNaoIndexados.size() - 1);
+				String ultimaPosicaoArray = arquivosNaoIndexados.get(arquivosNaoIndexados.size() - 1);
 				if (ultimaPosicaoArray != arquivosNaoIndexadosFiltro.get(i)) {
 					try {
-						documentumRepository
-								.ConsultarQueryUPDATE(Querys
-										.UPDATE_LINK(
-												"/teste_pasta_reindex/ParametrosIncorretos",
-												arquivosNaoIndexadosFiltro
-														.get(i),
-												"/teste_pasta_reindex/Nao_Indexados_TESTE"));
-						documentumRepository
-								.ConsultarQueryUPDATE(Querys
-										.UPDATE_UNLINK(
-												"/teste_pasta_reindex/Nao_Indexados_TESTE",
-												arquivosNaoIndexadosFiltro
-														.get(i)));
+						documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",arquivosNaoIndexadosFiltro.get(i),"/teste_pasta_reindex/Nao_Indexados_TESTE"));
+						documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",arquivosNaoIndexadosFiltro.get(i)));
 					} catch (Exception e) {
-
 						e.printStackTrace();
 					}
 				}
 
 			} else {
 				try {
-					documentumRepository
-							.ConsultarQueryUPDATE(Querys
-									.UPDATE_LINK(
-											"/teste_pasta_reindex/ParametrosIncorretos",
-											arquivosNaoIndexadosFiltro.get(i),
-											"/teste_pasta_reindex/Nao_Indexados_TESTE"));
-					documentumRepository.ConsultarQueryUPDATE(Querys
-							.UPDATE_UNLINK(
-									"/teste_pasta_reindex/Nao_Indexados_TESTE",
-									arquivosNaoIndexadosFiltro.get(i)));
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",arquivosNaoIndexadosFiltro.get(i),"/teste_pasta_reindex/Nao_Indexados_TESTE"));
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",arquivosNaoIndexadosFiltro.get(i)));
 				} catch (Exception e) {
 
 					e.printStackTrace();
@@ -158,10 +169,8 @@ public class Reindexacao {
 
 					validaPasta(listaRetornoWM);
 
-					documentumRepository
-							.ConsultarQueryUPDATE(Querys.UPDATE_LINK(
-									"/teste_pasta_reindex/"
-											+ listaRetornoWM.get("sinistro") + "/"+listaRetornoWM.get("expediente") ,
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/"
+									+ listaRetornoWM.get("sinistro") + "/"+listaRetornoWM.get("expediente") ,
 									params,
 									"/teste_pasta_reindex/Nao_Indexados_TESTE"));
 					documentumRepository.ConsultarQueryUPDATE(Querys
@@ -172,6 +181,51 @@ public class Reindexacao {
 				} else {
 
 					this.controleDePastas(params);
+
+				}
+
+			} catch (Exception e) {
+				System.err
+						.println("Erro na movimentação do arquivos em pastas.");
+				e.printStackTrace();
+			}
+
+		}
+	}
+	
+	public void movimentarParaPastas2(ArrayList<String> arquivosNaoIndexados, String DataEntrada) {
+
+		for (String params : arquivosNaoIndexados) {
+
+			String[] DocumentoSplitado = params.split("_");
+
+			boolean temPasta;
+
+			Map<String, String> listaRetornoWM = returnoWM(DocumentoSplitado[1]);// params
+			// para
+			// bater
+			// na WM
+			// depois
+			// !
+
+			try {
+
+				if (listaRetornoWM.get("reindexa").equals("sim")) {
+
+					validaPasta(listaRetornoWM);
+
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/"
+									+ listaRetornoWM.get("sinistro") + "/"+listaRetornoWM.get("expediente") ,
+									params,
+									"/teste_pasta_reindex/Nao_Indexados_TESTE"));
+					documentumRepository.ConsultarQueryUPDATE(Querys
+							.UPDATE_UNLINK(
+									"/teste_pasta_reindex/Nao_Indexados_TESTE",
+									params));
+
+				} else {
+
+					this.controleDePastas2(params, DataEntrada);
 
 				}
 
@@ -290,6 +344,47 @@ public class Reindexacao {
 						"date_nao_indexado_30", "", "",
 						"/teste_pasta_reindex/Menos30");
 			}
+		} catch (Exception e) {
+			System.err.println("Erro no controle do tempo de vida do arquivo.");
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void controleDePastas2(String arquivosSemPasta, String DataEntrada) {
+		// Registro JOAO depende do web service = false ----
+
+		ArrayList<String> arquivosNaoIndexadosMenos30;
+		ArrayList<String> arquivosNaoIndexadosMais60;
+
+		/*
+		 * Para cada arquivo que passou o filtro de arquivos fora do padrão e
+		 * validado se o arquivo está registrado em uma das pastas. Caso não
+		 * seja encontrado é criado o registro na pasta de
+		 */
+		try {
+
+				int diasProcessado = util.diasProcessados(DataEntrada);
+
+				/*
+				 * Caso o documento tenham sido processados por mais de 30 dias.
+				 * Passa pelo processo de mudança de pasta caso atinga o
+				 * trigésimo dia.
+				 */
+				
+				if (diasProcessado >= 31) {
+					//documentumRepository.ConsultarQueryUPDATE(Querys.DELETE(arquivosNaoIndexadosMenos30.get(0)));
+					//documentumRepository.createPasta60(arquivosSemPasta,"date_nao_indexado_60", "", "","/teste_pasta_reindex/Mais60",arquivosNaoIndexadosMenos30.get(2).split(" ")[0]);
+					//documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/PastaRegra", arquivosSemPasta, "/teste_pasta_reindex/Nao_Indexados_TESTE" ));
+				}
+				
+				if (diasProcessado >= 61) {
+					//documentumRepository.ConsultarQueryUPDATE(Querys.DELETE(arquivosNaoIndexadosMenos30.get(0)));
+					//documentumRepository.createPasta60(arquivosSemPasta,"date_nao_indexado_60", "", "","/teste_pasta_reindex/Mais60",arquivosNaoIndexadosMenos30.get(2).split(" ")[0]);
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/PastaRegra", arquivosSemPasta, "/teste_pasta_reindex/Nao_Indexados_TESTE" ));
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK( "/teste_pasta_reindex/Nao_Indexados_TESTE", arquivosSemPasta));
+				}
+			
 		} catch (Exception e) {
 			System.err.println("Erro no controle do tempo de vida do arquivo.");
 			e.printStackTrace();

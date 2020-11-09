@@ -216,14 +216,10 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 
 			IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
 
-			System.out
-					.println("----------------------------------------------------");
-			System.out.println("resultado: "
-					+ typeObject.getString("resultado_query"));
-			System.out.println("creation date "
-					+ typeObject.getString("r_object_id"));
-			System.out
-					.println("----------------------------------------------------");
+			System.out.println("----------------------------------------------------");
+			System.out.println("resultado: "+ typeObject.getString("resultado_query"));
+			System.out.println("creation date "+ typeObject.getString("r_object_id"));
+			System.out.println("----------------------------------------------------");
 
 			arquivo.add(typeObject.getString("resultado_query"));
 		}
@@ -361,18 +357,12 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 		while (collNotName.next()) {
 
 			System.out.println("ENTREI NA FUNCAO 0");
-			IDfTypedObject typeObject = (IDfTypedObject) collNotName
-					.getTypedObject();
+			IDfTypedObject typeObject = (IDfTypedObject) collNotName.getTypedObject();
 
-			System.out
-					.println("========" + typeObject.getString("r_object_id"));
+			System.out.println("========" + typeObject.getString("r_object_id"));
 
-			ConsultarQueryUPDATE(Querys.UPDATE_LINK_NAME_NULL(
-					"/teste_pasta_reindex/ParametrosIncorretos", typeObject
-							.getString("r_object_id")));
-			ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_NAME_NULL(
-					"/teste_pasta_reindex/Nao_Indexados_TESTE", typeObject
-							.getString("r_object_id")));
+			ConsultarQueryUPDATE(Querys.UPDATE_LINK_NAME_NULL("/teste_pasta_reindex/ParametrosIncorretos", typeObject.getString("r_object_id")));
+			ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_NAME_NULL("/teste_pasta_reindex/Nao_Indexados_TESTE", typeObject.getString("r_object_id")));
 
 		}
 
@@ -387,6 +377,64 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 	 */
 	public ArrayList<String> BuscaArquivosPasta(String pasta) throws Exception {
 		String queryString = Querys.PastaParaArquivo(pasta);
+
+		ArrayList<String> arquivo = new ArrayList<String>();
+
+		IDfQuery query = new DfQuery();
+
+		query.setDQL(queryString);
+
+		IDfCollection coll = query.execute(getSessDctm(), 0);
+
+		while (coll.next()) {
+
+			IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
+
+			String objectNameFile = typeObject.getString("resultado_query");
+
+			arquivo.add(objectNameFile);
+
+		}
+
+		if (coll != null)
+
+			coll.close();
+
+		return arquivo;
+
+	}
+	
+	public ArrayList<String> BuscaArquivosPastaID(String pasta) throws Exception {
+		String queryString = Querys.PastaParaArquivoID(pasta);
+
+		ArrayList<String> arquivo = new ArrayList<String>();
+
+		IDfQuery query = new DfQuery();
+
+		query.setDQL(queryString);
+
+		IDfCollection coll = query.execute(getSessDctm(), 0);
+
+		while (coll.next()) {
+
+			IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
+
+			String objectNameFile = typeObject.getString("resultado_query");
+
+			arquivo.add(objectNameFile);
+
+		}
+
+		if (coll != null)
+
+			coll.close();
+
+		return arquivo;
+
+	}
+	
+	public ArrayList<String> BuscaArquivosPastaID() throws Exception {
+		String queryString = Querys.selectTabelaRegistroID();
 
 		ArrayList<String> arquivo = new ArrayList<String>();
 
@@ -550,5 +598,29 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 		folder.save();
 
 	}
+	
+	public void ImportarDocumentum() {
+
+		 IDfDocument sysObj = null;
+
+		 try {
+
+		 sysObj = (IDfDocument) getSessDctm().newObject("dm_document");
+
+		 sysObj.setObjectName("NFO_3021720000331_00012020050307T02_TRC03_AFJ8654.txt");
+		// 202172000033166
+		// 301182000093177
+		//
+		sysObj.setContentType("pdf");
+		sysObj.setFile("C:\\Documentum\\export\\testandoTwitch.txt");
+		sysObj.link("/teste_pasta_reindex/Nao_Indexados_TESTE");
+		sysObj.save();
+
+		 } catch (DfException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+
+		 }
 
 }

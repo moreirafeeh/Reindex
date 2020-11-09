@@ -10,6 +10,12 @@ public class Querys {
 		return query;
 	}
 	
+	public static String PastaParaArquivoID(String PathDeBusca){
+		String query = "select r_object_id as resultado_query from dm_sysobject where FOLDER('" + PathDeBusca +  "',descend)";
+		System.out.println(query);
+		return query;
+	}
+	
 	public static String ArquivosDeUmaPasta(String PathDeBusca){
 		String query = "select dm_document.object_name as resultado_query from dm_document where FOLDER('"+ PathDeBusca +"') and dm_document.a_storage_type ='filestore_01';";
 		System.out.println(query);
@@ -76,7 +82,6 @@ public class Querys {
 	}
 	
 	
-	
 	public static String UPDATE_LINK_NAME_NULL(String PathSeraLinkado ,String id_arquivo){
 		String query = "update dm_document object link '" + PathSeraLinkado +"' where r_object_id ='" + id_arquivo +"'";
 		return query;
@@ -98,11 +103,11 @@ public class Querys {
 	}
 	
 	public static String CriarTabelaBanco(String NomeTabela){
-		String query = "EXECUTE exec_sql with query='create table" + NomeTabela + "(id_arquivo varchar(200),nome_arquivo varchar(200) , data_entrada varchar(20))'";
+		String query = "EXECUTE exec_sql with query='create table" + NomeTabela + "(id_arquivo varchar(200) UNIQUE,nome_arquivo varchar(200) , data_entrada varchar(20))'";
 		System.out.println(query);
 		return query;
 	}
-	
+	//TabelaReindexacaoUnica
 	//Quando se cria uma tabela registrada é necessário primeiro executar o método "CriarTabelaBanco"
 	//Em seguida criarTabelaRegistrada com o mesmo no da tabela no banco
 	public static String CriarTabelaRegistrada(String NomeTabela){
@@ -112,26 +117,31 @@ public class Querys {
 	}
 	
 	public static String inserirValoresTabelaRegistrada(String id_arquivo,String nome_arquivo, String data_entrada){
-		String query = "INSERT INTO dm_dbo.TabelaReindexacao (id_arquivo, nome_arquivo, data_entrada) VALUES ( '"+ id_arquivo +"' ,' " + nome_arquivo + "', '" + data_entrada + " ')";
+		String query = "INSERT INTO dm_dbo.TabelaReindexacaoUnica  (id_arquivo, nome_arquivo, data_entrada) VALUES ( '"+ id_arquivo +"' ,' " + nome_arquivo + "', '" + data_entrada + " ')";
 		System.out.println(query);
 		return query;
 	}
 	
 	public static String updateTabelaRegistrada(String atributoDesejaMudar,String valorDaAlteracao, String id_arquivoWHERE){
-		String query = "UPDATE dm_dbo.TabelaReindexacao SET " + atributoDesejaMudar + "= '" + valorDaAlteracao +"' WHERE id_arquivo = '" + id_arquivoWHERE + "';";
+		String query = "UPDATE dm_dbo.TabelaReindexacaoUnica  SET " + atributoDesejaMudar + "= '" + valorDaAlteracao +"' WHERE id_arquivo = '" + id_arquivoWHERE + "';";
 		System.out.println(query);
 		return query;
 	}
 	
 	public static String deleteValorTabelaRegistrada(String idArquivoSeraDeletado){
-		String query = "DELETE from dm_dbo.TabelaReindexacao Where id_arquivo = '" + idArquivoSeraDeletado +"'";
+		String query = "DELETE from dm_dbo.TabelaReindexacaoUnica  Where id_arquivo = '" + idArquivoSeraDeletado +"'";
 		System.out.println(query);
 		return query;
 	}
 	
+	public static String selectTabelaRegistroID(){
+		String query = "select id_arquivo as resultado_query from dm_dbo.TabelaReindexacaoUnica";
+		return query;
+	}
+	
+	
 	
 	public static String PastaExisteExpediente(String sinistro){
-
 		String query = "select count(object_name) as resultado_query  from  dm_folder where FOLDER('/teste_pasta_reindex/"+sinistro+"')";
 		return query;
 	}
