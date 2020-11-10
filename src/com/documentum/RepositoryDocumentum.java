@@ -218,7 +218,7 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 
 			System.out.println("----------------------------------------------------");
 			System.out.println("resultado: "+ typeObject.getString("resultado_query"));
-			System.out.println("creation date "+ typeObject.getString("r_object_id"));
+			//System.out.println("creation date "+ typeObject.getString("r_object_id"));
 			System.out.println("----------------------------------------------------");
 
 			arquivo.add(typeObject.getString("resultado_query"));
@@ -321,6 +321,37 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 		return arquivo;
 
 	}
+	
+	public ArrayList<String> ConsultarQueryData2(String queryString)throws Exception {
+	System.out.println("PRINT CONSULTAR QUERY DATA");
+	System.out.println(queryString);
+	ArrayList<String> arquivo = new ArrayList<String>();
+	
+	IDfQuery query = new DfQuery();
+	
+	query.setDQL(queryString);
+	
+	IDfCollection coll = query.execute(getSessDctm(), 0);
+	
+	while (coll.next()) {
+	
+		IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
+	
+		System.out
+				.println("----------------------------------------------------");
+		System.out.println("resultado: "
+				+ typeObject.getString("data_entrada"));
+	
+		arquivo.add(typeObject.getString("data_entrada"));
+}
+
+if (coll != null)
+
+	coll.close();
+
+return arquivo;
+
+}
 
 	/**
 	 * Este Método faz um UPDATE DQL no Documentum
@@ -435,6 +466,64 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 	
 	public ArrayList<String> BuscaArquivosPastaID() throws Exception {
 		String queryString = Querys.selectTabelaRegistroID();
+
+		ArrayList<String> arquivo = new ArrayList<String>();
+
+		IDfQuery query = new DfQuery();
+
+		query.setDQL(queryString);
+
+		IDfCollection coll = query.execute(getSessDctm(), 0);
+
+		while (coll.next()) {
+
+			IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
+
+			String objectNameFile = typeObject.getString("resultado_query");
+
+			arquivo.add(objectNameFile);
+
+		}
+
+		if (coll != null)
+
+			coll.close();
+
+		return arquivo;
+
+	}
+	
+	public ArrayList<String> BuscaArquivosPastaDataEntrada() throws Exception {
+		String queryString = Querys.selectTabelaRegistroDataEntrada();
+
+		ArrayList<String> arquivo = new ArrayList<String>();
+
+		IDfQuery query = new DfQuery();
+
+		query.setDQL(queryString);
+
+		IDfCollection coll = query.execute(getSessDctm(), 0);
+
+		while (coll.next()) {
+
+			IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
+
+			String objectNameFile = typeObject.getString("resultado_query");
+
+			arquivo.add(objectNameFile);
+
+		}
+
+		if (coll != null)
+
+			coll.close();
+
+		return arquivo;
+
+	}
+	
+	public ArrayList<String> BuscaArquivosPastaNome() throws Exception {
+		String queryString = Querys.selectTabelaRegistroNome();
 
 		ArrayList<String> arquivo = new ArrayList<String>();
 

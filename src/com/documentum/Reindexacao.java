@@ -79,6 +79,37 @@ public class Reindexacao {
 		}
 	}
 	
+	@SuppressWarnings("finally")
+	public ArrayList<String> BuscaRegistroDataEntrada() {
+		ArrayList<String> array = new ArrayList<String>();
+
+		try {
+			array = this.documentumRepository.BuscaArquivosPastaDataEntrada();
+
+		} catch (Exception e) {
+			System.out.println("Erro ao buscar arquivos.");
+			e.printStackTrace();
+		} finally {
+			return array;
+		}
+	}
+	
+	@SuppressWarnings("finally")
+	public ArrayList<String> BuscaRegistroNome() {
+		ArrayList<String> array = new ArrayList<String>();
+
+		try {
+			array = this.documentumRepository.BuscaArquivosPastaNome();
+
+		} catch (Exception e) {
+			System.out.println("Erro ao buscar arquivos.");
+			e.printStackTrace();
+		} finally {
+			return array;
+		}
+	}
+	
+	
 	
 	
 
@@ -193,7 +224,10 @@ public class Reindexacao {
 		}
 	}
 	
-	public void movimentarParaPastas2(ArrayList<String> arquivosNaoIndexados, String DataEntrada) {
+	public void movimentarParaPastas2(ArrayList<String> arquivosNaoIndexados, 
+			ArrayList<String> arquivosRegistroID, 
+			ArrayList<String> DataEntrada, 
+			ArrayList<String> arquivosRegistroNome) {
 
 		for (String params : arquivosNaoIndexados) {
 
@@ -225,7 +259,7 @@ public class Reindexacao {
 
 				} else {
 
-					this.controleDePastas2(params, DataEntrada);
+					this.controleDePastas2(params);
 
 				}
 
@@ -351,11 +385,8 @@ public class Reindexacao {
 
 	}
 	
-	public void controleDePastas2(String arquivosSemPasta, String DataEntrada) {
+	public void controleDePastas2(String arquivosSemPasta) {
 		// Registro JOAO depende do web service = false ----
-
-		ArrayList<String> arquivosNaoIndexadosMenos30;
-		ArrayList<String> arquivosNaoIndexadosMais60;
 
 		/*
 		 * Para cada arquivo que passou o filtro de arquivos fora do padrão e
@@ -363,14 +394,12 @@ public class Reindexacao {
 		 * seja encontrado é criado o registro na pasta de
 		 */
 		try {
-
-				int diasProcessado = util.diasProcessados(DataEntrada);
-
-				/*
-				 * Caso o documento tenham sido processados por mais de 30 dias.
-				 * Passa pelo processo de mudança de pasta caso atinga o
-				 * trigésimo dia.
-				 */
+			System.out.println("------ARQUIVO SEM PASTA------"+ arquivosSemPasta);
+			ArrayList<String> arrayRegistroNome = this.documentumRepository.ConsultarQuery(Querys.selectTabelaRegistroNomeEspecifico(arquivosSemPasta));
+			System.out.println("------SELECT DO NOME------"+ arrayRegistroNome.get(0));
+			int diasProcessado = util.diasProcessados(arrayRegistroNome.get(0).toString());
+			System.out.println("------DIAS PROCESSADOS------"+ diasProcessado);
+			
 				
 				if (diasProcessado >= 31) {
 					//documentumRepository.ConsultarQueryUPDATE(Querys.DELETE(arquivosNaoIndexadosMenos30.get(0)));

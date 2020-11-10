@@ -139,6 +139,21 @@ public class Querys {
 		return query;
 	}
 	
+	public static String selectTabelaRegistroDataEntrada(){
+		String query = "select data_entrada as resultado_query from dm_dbo.TabelaReindexacaoUnica";
+		return query;
+	}
+	
+	public static String selectTabelaRegistroNome(){
+		String query = "select nome_arquivo as resultado_query from dm_dbo.TabelaReindexacaoUnica";
+		return query;
+	}
+	
+	public static String selectTabelaRegistroNomeEspecifico(String nome_arquivo){
+		String query = "select data_entrada as resultado_query from dm_dbo.TabelaReindexacaoUnica where nome_arquivo LIKE'%" + nome_arquivo + "%'";
+		return query;
+	}
+	
 	
 	
 	public static String PastaExisteExpediente(String sinistro){
