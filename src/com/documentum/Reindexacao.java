@@ -10,6 +10,7 @@ import org.apache.commons.io.FilenameUtils;
 import com.documentum.ObjectsParam.Querys;
 
 import com.documentum.operations.impl.common.query.Query;
+import com.documentum.type.DocumentumReindexacao;
 
 import com.documentum.fc.common.DfException;
 
@@ -33,11 +34,11 @@ public class Reindexacao {
 	 * @since 29/09/2020
 	 */
 	@SuppressWarnings("finally")
-	public ArrayList<String> BuscaPasta() {
-		ArrayList<String> array = new ArrayList<String>();
+	public ArrayList<DocumentumReindexacao> BuscaPasta() {
+		ArrayList<DocumentumReindexacao> array = new ArrayList<DocumentumReindexacao>();
 
 		try {
-			array = this.documentumRepository.BuscaArquivosPasta("/teste_pasta_reindex/Nao_Indexados_TESTE");
+			 array = this.documentumRepository.BuscaArquivosPasta("/teste_pasta_reindex/Nao_Indexados_TESTE");
 
 		} catch (Exception e) {
 			System.out.println("Erro ao buscar arquivos.");

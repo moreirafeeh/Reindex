@@ -13,6 +13,7 @@ import com.documentum.fc.client.IDfFolder;
 import com.documentum.fc.client.IDfQuery;
 import com.documentum.fc.client.IDfTypedObject;
 import com.documentum.fc.common.DfException;
+import com.documentum.type.DocumentumReindexacao;
 
 public class RepositoryDocumentum extends ConexaoDocumentum {
 
@@ -406,10 +407,10 @@ return arquivo;
 	 *            pasta: Path da pasta onde será buscado os arquivos no
 	 *            Documentum
 	 */
-	public ArrayList<String> BuscaArquivosPasta(String pasta) throws Exception {
+	public ArrayList<DocumentumReindexacao> BuscaArquivosPasta(String pasta) throws Exception {
 		String queryString = Querys.PastaParaArquivo(pasta);
 
-		ArrayList<String> arquivo = new ArrayList<String>();
+		ArrayList<DocumentumReindexacao> arquivo = new ArrayList<DocumentumReindexacao>();
 
 		IDfQuery query = new DfQuery();
 
@@ -420,10 +421,13 @@ return arquivo;
 		while (coll.next()) {
 
 			IDfTypedObject typeObject = (IDfTypedObject) coll.getTypedObject();
-
-			String objectNameFile = typeObject.getString("resultado_query");
-
-			arquivo.add(objectNameFile);
+			
+			DocumentumReindexacao doc = new DocumentumReindexacao();
+			
+			doc.setId(typeObject.getString("r_object_id"));
+			doc.setNome(typeObject.getString("object_name"));
+			
+			arquivo.add(doc);
 
 		}
 

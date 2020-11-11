@@ -11,6 +11,7 @@ import com.documentum.Reindexacao;
 import com.documentum.RepositoryDocumentum;
 import com.documentum.fc.client.IDfDocument;
 import com.documentum.fc.common.DfException;
+import com.documentum.type.DocumentumReindexacao;
 import com.documentum.ObjectsParam.Querys;
 
 
@@ -26,14 +27,24 @@ public class DocumentumRunner {
 		//documentumRepository.ConsultarQueryUPDATE(Querys.deleteValorTabelaRegistrada("2"));
 		
 		//-----JOGA O "object_name" DOS ARQUIVOS NO ARRAY------ 
-		ArrayList<String> arquivosNaoIndexados = new ArrayList<String>();
+		ArrayList<DocumentumReindexacao> arquivosNaoIndexados = new ArrayList<DocumentumReindexacao>();
 		//--------LIMPAR ARQUIVOS COM NOME NULO----------------
 		documentumRepository.InvalidObjectNameZero();
 		//ARRAYS DE ARQUIVOS INDEXADOS  separado em array de ID E NOME
-		ArrayList<String> arquivosNaoIndexadosFiltro = reindexacao.BuscaPasta();
-		ArrayList<String> arquivosNaoIndexadosFiltroID = reindexacao.BuscaPastaID();
+		ArrayList<DocumentumReindexacao> arquivosNaoIndexadosFiltro = reindexacao.BuscaPasta();
 		
 		//-----------------------------------------------------
+		
+		
+		
+		//-------------ARRAY DA TABELA DE REGISTRO SEPARADO EM ID, NOME, DATA DE ENTRADA
+		//ArrayList<String> Registros = new ArrayList<String>();
+		ArrayList<DocumentumReindexacao> arquivosRegistroID = reindexacao.BuscaRegistroID();
+		
+		//MOVIMENTA OS ARQUIVOS PARA AS PASTA DE 30 E 60-------
+		arquivosNaoIndexados = reindexacao.filtrarArquivos(arquivosNaoIndexadosFiltro); 
+		
+		
 		
 		//------DATA DE HOJE-----
 		Date date = new Date();  
@@ -42,27 +53,21 @@ public class DocumentumRunner {
 		System.out.println(dataDeEntradaDocumento);
 		//-----------------------
 		
+		
 		//----------------INSERCAO DE REGISTROS BASEADO NO arquivosNaoIndexadosFiltro--------
-		for(int i = 0; i <  arquivosNaoIndexadosFiltroID.size() && i < arquivosNaoIndexadosFiltro.size(); i++ ){
+		for(int i = 0;  i < arquivosNaoIndexados.size(); i++ ){
 			try{
-				documentumRepository.ConsultarQueryUPDATE(Querys.inserirValoresTabelaRegistrada(arquivosNaoIndexadosFiltroID.get(i), arquivosNaoIndexadosFiltro.get(i), dataDeEntradaDocumento.toString()));
+				documentumRepository.ConsultarQueryUPDATE(Querys.inserirValoresTabelaRegistrada(arquivosNaoIndexados.get(i).getId(), arquivosNaoIndexados.get(i).getNome(), dataDeEntradaDocumento.toString()));
 			}
 			catch(Exception e){
-				System.out.println("-----------" + arquivosNaoIndexadosFiltroID.get(i) + "------JÁ  PERTENCE AO REGISTRO");
+				System.out.println("-----------" + arquivosNaoIndexadosFiltro.get(i).getId() + "------JÁ  PERTENCE AO REGISTRO");
 			}
 			//documentumRepository.ConsultarQueryUPDATE(Querys.deleteValorTabelaRegistrada(arquivosNaoIndexadosFiltroID.get(i)));
 		}
 		//------------------------------------------------------------------------------------
 		
-		//-------------ARRAY DA TABELA DE REGISTRO SEPARADO EM ID, NOME, DATA DE ENTRADA
-		//ArrayList<String> Registros = new ArrayList<String>();
-		ArrayList<String> arquivosRegistroID = reindexacao.BuscaRegistroID();
-		ArrayList<String> arquivosRegistroDataEntrada = reindexacao.BuscaRegistroDataEntrada();
-		ArrayList<String> arquivosRegistroNome = reindexacao.BuscaRegistroNome();
-	
 		
-		//MOVIMENTA OS ARQUIVOS PARA AS PASTA DE 30 E 60-------
-		arquivosNaoIndexados = reindexacao.filtrarArquivos(arquivosNaoIndexadosFiltro); 
+		
 		System.out.println("DEPOIS DO FILTRO -----"+ arquivosNaoIndexados);
 		reindexacao.movimentarParaPastas2(arquivosNaoIndexados,arquivosRegistroID, arquivosRegistroDataEntrada, arquivosRegistroNome); //FALTA FAZER A MANIPULACAO NOVA DE PASTA ANTES DOS 30 DIAS
 		//-----------------------------------------------------

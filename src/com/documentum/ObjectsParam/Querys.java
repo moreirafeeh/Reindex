@@ -5,7 +5,7 @@ public class Querys {
 	//acha arquivos dentro de um folder
 	// PastaparaArquivo(/Felipe Twitch/felipinho3)
 	public static String PastaParaArquivo(String PathDeBusca){
-		String query = "select object_name as resultado_query from dm_sysobject where FOLDER('" + PathDeBusca +  "',descend)";
+		String query = "select object_name, r_object_id  from dm_sysobject where FOLDER('" + PathDeBusca +  "',descend)";
 		System.out.println(query);
 		return query;
 	}
