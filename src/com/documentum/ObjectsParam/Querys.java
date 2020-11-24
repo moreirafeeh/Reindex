@@ -6,7 +6,6 @@ public class Querys {
 	// PastaparaArquivo(/Felipe Twitch/felipinho3)
 	public static String PastaParaArquivo(String PathDeBusca){
 		String query = "select object_name, r_object_id  from dm_sysobject where FOLDER('" + PathDeBusca +  "',descend)";
-		System.out.println(query);
 		return query;
 	}
 	
@@ -46,8 +45,8 @@ public class Querys {
 		return query;
 	}
 	
-	public static String UPDATE_LINK_ID(String PathSeraLinkado ,String id_arquivo){
-		String query = "update dm_document object link '" + PathSeraLinkado +"' where r_object_id='" + id_arquivo +"'";
+	public static String UPDATE_LINK_ID(String PathSeraLinkado ,String id_arquivo,String PathBusca){
+		String query = "update dm_document object link '" + PathSeraLinkado +"' where r_object_id='" + id_arquivo + "'" + "and FOLDER('" + PathBusca + "')" ;
 		return query;
 		
 	}

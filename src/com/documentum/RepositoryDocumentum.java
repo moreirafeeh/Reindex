@@ -203,8 +203,6 @@ public class RepositoryDocumentum extends ConexaoDocumentum {
 	// -------------------CONSULTAS DQL--------------------
 	public ArrayList<String> ConsultarQuery(String queryString)
 			throws Exception {
-		System.out.println("PRINT CONSULTAR QUERY");
-		System.out.println(queryString);
 		ArrayList<String> arquivo = new ArrayList<String>();
 
 		IDfQuery query = new DfQuery();
@@ -363,7 +361,7 @@ return arquivo;
 	 */
 	public void ConsultarQueryUPDATE(String queryString) throws Exception {
 
-		System.out.println(queryString);
+		//		System.out.println(queryString);
 		IDfQuery query = new DfQuery();
 
 		query.setDQL(queryString);
@@ -379,7 +377,9 @@ return arquivo;
 	 * @since 29/09/2020
 	 */
 	public void InvalidObjectNameZero() throws Exception {
-
+		
+		System.out.println("Limpando arquivos com nome vazio.");
+		
 		IDfQuery query = new DfQuery();
 
 		query.setDQL(Querys.MoveFileNameNull("Nao_Indexados_TESTE"));
@@ -388,10 +388,9 @@ return arquivo;
 
 		while (collNotName.next()) {
 
-			System.out.println("ENTREI NA FUNCAO 0");
 			IDfTypedObject typeObject = (IDfTypedObject) collNotName.getTypedObject();
 
-			System.out.println("========" + typeObject.getString("r_object_id"));
+			System.out.println("Arquivo invalido: " + typeObject.getString("r_object_id"));
 
 			ConsultarQueryUPDATE(Querys.UPDATE_LINK_NAME_NULL("/teste_pasta_reindex/ParametrosIncorretos", typeObject.getString("r_object_id")));
 			ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_NAME_NULL("/teste_pasta_reindex/Nao_Indexados_TESTE", typeObject.getString("r_object_id")));
@@ -697,21 +696,30 @@ return arquivo;
 		 IDfDocument sysObj = null;
 
 		 try {
-
-		 sysObj = (IDfDocument) getSessDctm().newObject("dm_document");
-
-		 sysObj.setObjectName("NFO_3021720000331_00012020050307T02_TRC03_AFJ8654.txt");
-		// 202172000033166
-		// 301182000093177
-		//
-		sysObj.setContentType("pdf");
-		sysObj.setFile("C:\\Documentum\\export\\testandoTwitch.txt");
-		sysObj.link("/teste_pasta_reindex/Nao_Indexados_TESTE");
-		sysObj.save();
+			 
+			 String[] array = {
+					 "NFO_3021720000331_00012020050307T02_TRC03_AFJ8654.pdf",
+					 "NFO_0000000000000_00000000000000000_00000_0000000.pdf",
+					 "NFO_0000000000000_00000000000000000_TRC03_AFJ8654.pdf",
+					 "NFO_0000000000000_00012020050307T02_TRC03_AFJ8654.pdf",
+					 "NFO_3031720000333_00012020076357T03_TRC03_AFJ8654.pdf",
+					 "NFO_3021730000344_00000000000000000_TRC03_AFJ8654.pdf",
+					 ".pdf",
+					 "TEST.pdf",
+					 "",					 
+					 };
+			 for (String string : array) {
+					sysObj = (IDfDocument) getSessDctm().newObject("dm_document");
+					sysObj.setObjectName(string);
+					sysObj.setContentType("pdf");
+					sysObj.setFile("C:\\document.pdf");
+					sysObj.link("/teste_pasta_reindex/Nao_Indexados_TESTE");
+					sysObj.save();
+			}
+			 System.out.println("Arquivos Inseridos PARA TESTE");
 
 		 } catch (DfException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+			 e.printStackTrace();
 		}
 
 		 }

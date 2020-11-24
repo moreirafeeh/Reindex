@@ -1,6 +1,5 @@
 package com.documentum;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,37 +7,28 @@ import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
 
 import com.documentum.ObjectsParam.Querys;
-
-import com.documentum.operations.impl.common.query.Query;
-import com.documentum.type.DocumentumReindexacao;
-
 import com.documentum.fc.common.DfException;
-
-import com.documentum.RepositoryDocumentum;
-import com.documentum.Utils;
+import com.documentum.type.DocumentumReindexacao;
 
 public class Reindexacao {
 
 	private RepositoryDocumentum documentumRepository;
-	private Utils util;
 
 	public Reindexacao(RepositoryDocumentum documentumRepository) {
 		this.documentumRepository = documentumRepository;
-		this.util = new Utils();
 	}
 
 	/**
-	 * Este Método é responsavel por Buscar os nomes dos arquivos na Pasta
-	 * "Não Indexados"
+	 * Este Método é responsavel por Buscar os nomes dos arquivos na Pasta "Não Indexados"
 	 * 
 	 * @since 29/09/2020
 	 */
 	@SuppressWarnings("finally")
-	public ArrayList<DocumentumReindexacao> BuscaPasta() {
+	public ArrayList<DocumentumReindexacao> BuscaPasta(String path) {
 		ArrayList<DocumentumReindexacao> array = new ArrayList<DocumentumReindexacao>();
 
 		try {
-			 array = this.documentumRepository.BuscaArquivosPasta("/teste_pasta_reindex/Nao_Indexados_TESTE");
+			 array = this.documentumRepository.BuscaArquivosPasta(path);
 
 		} catch (Exception e) {
 			System.out.println("Erro ao buscar arquivos.");
@@ -48,71 +38,6 @@ public class Reindexacao {
 		}
 
 	}
-	
-	@SuppressWarnings("finally")
-	public ArrayList<String> BuscaPastaID() {
-		ArrayList<String> array = new ArrayList<String>();
-
-		try {
-			array = this.documentumRepository.BuscaArquivosPastaID();
-
-		} catch (Exception e) {
-			System.out.println("Erro ao buscar arquivos.");
-			e.printStackTrace();
-		} finally {
-			return array;
-		}
-
-	}
-	
-	@SuppressWarnings("finally")
-	public ArrayList<String> BuscaRegistroID() {
-		ArrayList<String> array = new ArrayList<String>();
-
-		try {
-			array = this.documentumRepository.BuscaArquivosPastaID();
-
-		} catch (Exception e) {
-			System.out.println("Erro ao buscar arquivos.");
-			e.printStackTrace();
-		} finally {
-			return array;
-		}
-	}
-	
-	@SuppressWarnings("finally")
-	public ArrayList<String> BuscaRegistroDataEntrada() {
-		ArrayList<String> array = new ArrayList<String>();
-
-		try {
-			array = this.documentumRepository.BuscaArquivosPastaDataEntrada();
-
-		} catch (Exception e) {
-			System.out.println("Erro ao buscar arquivos.");
-			e.printStackTrace();
-		} finally {
-			return array;
-		}
-	}
-	
-	@SuppressWarnings("finally")
-	public ArrayList<String> BuscaRegistroNome() {
-		ArrayList<String> array = new ArrayList<String>();
-
-		try {
-			array = this.documentumRepository.BuscaArquivosPastaNome();
-
-		} catch (Exception e) {
-			System.out.println("Erro ao buscar arquivos.");
-			e.printStackTrace();
-		} finally {
-			return array;
-		}
-	}
-	
-	
-	
-	
 
 	/**
 	 * Este Método é responsavel por filtrar os arquivos da pasta
@@ -120,22 +45,22 @@ public class Reindexacao {
 	 * 
 	 * @since 29/09/2020
 	 */
-	public ArrayList<String> filtrarArquivos(ArrayList<String> arquivosNaoIndexadosFiltro) {
+	public ArrayList<DocumentumReindexacao> filtrarArquivos(ArrayList<DocumentumReindexacao> arquivosNaoIndexadosFiltro) {
 
-		ArrayList<String> arquivosNaoIndexados = new ArrayList<String>();
+		ArrayList<DocumentumReindexacao> arquivosNaoIndexados = new ArrayList<DocumentumReindexacao>();
 
 		int i = 0;
 		while (i < arquivosNaoIndexadosFiltro.size()) {
-			System.out.println(i);
 
-			String[] params = arquivosNaoIndexadosFiltro.get(i).split("_");
+			String[] params = arquivosNaoIndexadosFiltro.get(i).getNome().split("_");
 
 			for (String param : params) {
+//				System.out.println(param + " " + (Utils.validaSinistro(param) || Utils.validaProtocolo(param)));
 				// Remove a extensão do arquivo.
 				param = FilenameUtils.removeExtension(param);
 
 				// Validação de Sinistro e Protocolo
-				if (util.validaSinistro(param) || util.validaProtocolo(param)) {
+				if (Utils.validaSinistro(param) || Utils.validaProtocolo(param)) {
 					arquivosNaoIndexados.add(arquivosNaoIndexadosFiltro.get(i));
 					break;
 				}
@@ -145,11 +70,11 @@ public class Reindexacao {
 			// Caso o arquivo não seja adicionado na lista de arquivos valido
 			// ele é enviado pra arquivos de parametros invalidos.
 			if (arquivosNaoIndexados.size() > 0) {
-				String ultimaPosicaoArray = arquivosNaoIndexados.get(arquivosNaoIndexados.size() - 1);
-				if (ultimaPosicaoArray != arquivosNaoIndexadosFiltro.get(i)) {
+				DocumentumReindexacao ultimaPosicaoArray = arquivosNaoIndexados.get(arquivosNaoIndexados.size() - 1);
+				if (!ultimaPosicaoArray.equals(arquivosNaoIndexadosFiltro.get(i))) {
 					try {
-						documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",arquivosNaoIndexadosFiltro.get(i),"/teste_pasta_reindex/Nao_Indexados_TESTE"));
-						documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",arquivosNaoIndexadosFiltro.get(i)));
+						documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",arquivosNaoIndexadosFiltro.get(i).getNome(),"/teste_pasta_reindex/Nao_Indexados_TESTE"));
+						documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",arquivosNaoIndexadosFiltro.get(i).getNome()));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -157,8 +82,8 @@ public class Reindexacao {
 
 			} else {
 				try {
-					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",arquivosNaoIndexadosFiltro.get(i),"/teste_pasta_reindex/Nao_Indexados_TESTE"));
-					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",arquivosNaoIndexadosFiltro.get(i)));
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/ParametrosIncorretos",arquivosNaoIndexadosFiltro.get(i).getNome(),"/teste_pasta_reindex/Nao_Indexados_TESTE"));
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK("/teste_pasta_reindex/Nao_Indexados_TESTE",arquivosNaoIndexadosFiltro.get(i).getNome()));
 				} catch (Exception e) {
 
 					e.printStackTrace();
@@ -167,7 +92,6 @@ public class Reindexacao {
 
 			i = i + 1;
 		}
-
 		return arquivosNaoIndexados;
 
 	}
@@ -180,87 +104,27 @@ public class Reindexacao {
 	 * @param arquivosNaoIndexados
 	 *            : array de arquivosFiltrados.
 	 */
-	public void movimentarParaPastas(ArrayList<String> arquivosNaoIndexados) {
+	public void movimentarParaPastas(ArrayList<DocumentumReindexacao> arquivosNaoIndexados) {
 
-		for (String params : arquivosNaoIndexados) {
+		for (DocumentumReindexacao params : arquivosNaoIndexados) {
 
-			String[] DocumentoSplitado = params.split("_");
+			String[] DocumentoSplitado = params.getNome().split("_");
 
-			boolean temPasta;
 
-			Map<String, String> listaRetornoWM = returnoWM(DocumentoSplitado[1]);// params
-			// para
-			// bater
-			// na WM
-			// depois
-			// !
+			Map<String, String> listaRetornoWM = returnoWM(DocumentoSplitado[1]);
 
 			try {
-
 				if (listaRetornoWM.get("reindexa").equals("sim")) {
 
 					validaPasta(listaRetornoWM);
 
-					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/"
-									+ listaRetornoWM.get("sinistro") + "/"+listaRetornoWM.get("expediente") ,
-									params,
-									"/teste_pasta_reindex/Nao_Indexados_TESTE"));
-					documentumRepository.ConsultarQueryUPDATE(Querys
-							.UPDATE_UNLINK(
-									"/teste_pasta_reindex/Nao_Indexados_TESTE",
-									params));
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK_ID("/teste_pasta_reindex/" + listaRetornoWM.get("sinistro") + "/" + listaRetornoWM.get("expediente"),params.getId(),"/teste_pasta_reindex/Nao_Indexados_TESTE"));
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_ID("/teste_pasta_reindex/Nao_Indexados_TESTE",params.getId()));
+					documentumRepository.ConsultarQueryUPDATE(Querys.deleteValorTabelaRegistrada(params.getId()));
 
 				} else {
 
-					this.controleDePastas(params);
-
-				}
-
-			} catch (Exception e) {
-				System.err
-						.println("Erro na movimentação do arquivos em pastas.");
-				e.printStackTrace();
-			}
-
-		}
-	}
-	
-	public void movimentarParaPastas2(ArrayList<String> arquivosNaoIndexados, 
-			ArrayList<String> arquivosRegistroID, 
-			ArrayList<String> DataEntrada, 
-			ArrayList<String> arquivosRegistroNome) {
-
-		for (String params : arquivosNaoIndexados) {
-
-			String[] DocumentoSplitado = params.split("_");
-
-			boolean temPasta;
-
-			Map<String, String> listaRetornoWM = returnoWM(DocumentoSplitado[1]);// params
-			// para
-			// bater
-			// na WM
-			// depois
-			// !
-
-			try {
-
-				if (listaRetornoWM.get("reindexa").equals("sim")) {
-
-					validaPasta(listaRetornoWM);
-
-					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/"
-									+ listaRetornoWM.get("sinistro") + "/"+listaRetornoWM.get("expediente") ,
-									params,
-									"/teste_pasta_reindex/Nao_Indexados_TESTE"));
-					documentumRepository.ConsultarQueryUPDATE(Querys
-							.UPDATE_UNLINK(
-									"/teste_pasta_reindex/Nao_Indexados_TESTE",
-									params));
-
-				} else {
-
-					this.controleDePastas2(params);
+					this.controleDeRegras(params);
 
 				}
 
@@ -280,113 +144,7 @@ public class Reindexacao {
 	 * @param param
 	 *            : arquivo
 	 */
-	public void controleDePastas(String arquivosSemPasta) {
-		// Registro JOAO depende do web service = false ----
-
-		ArrayList<String> arquivosNaoIndexadosMenos30;
-		ArrayList<String> arquivosNaoIndexadosMais60;
-
-		/*
-		 * Para cada arquivo que passou o filtro de arquivos fora do padrão e
-		 * validado se o arquivo está registrado em uma das pastas. Caso não
-		 * seja encontrado é criado o registro na pasta de
-		 */
-		try {
-			arquivosNaoIndexadosMenos30 = documentumRepository
-					.ConsultarQueryData(Querys
-							.ArquivoNaoIndexado30(arquivosSemPasta));
-
-			arquivosNaoIndexadosMais60 = documentumRepository
-					.ConsultarQueryData(Querys
-							.ArquivoNaoIndexado60(arquivosSemPasta));
-
-			if (!arquivosNaoIndexadosMenos30.isEmpty()) {
-
-				int diasProcessado = util
-						.diasProcessados(arquivosNaoIndexadosMenos30.get(2)
-								.split(" ")[0]);
-
-				/*
-				 * Caso o documento tenham sido processados por mais de 30 dias.
-				 * Passa pelo processo de mudança de pasta caso atinga o
-				 * trigésimo dia.
-				 */
-				if (diasProcessado >= 31) {
-					documentumRepository.ConsultarQueryUPDATE(Querys
-							.DELETE(arquivosNaoIndexadosMenos30.get(0)));
-					documentumRepository.createPasta60(arquivosSemPasta,
-							"date_nao_indexado_60", "", "",
-							"/teste_pasta_reindex/Mais60",
-							arquivosNaoIndexadosMenos30.get(2).split(" ")[0]);
-				}
-			}
-
-			if (!arquivosNaoIndexadosMais60.isEmpty()) {
-
-				int diasProcessado = util
-						.diasProcessados(arquivosNaoIndexadosMais60.get(2)
-								.split(" ")[0]);
-
-				/*
-				 * Caso o documento tenham sido processados por mais de 60 dias.
-				 * Passa pelo processo de expurgo caso atinga o sexagésimo dia.
-				 */
-				if (diasProcessado >= 60) {
-					documentumRepository.ConsultarQueryUPDATE(Querys
-							.UPDATE_LINK("/teste_pasta_reindex/Expurgo", // Pasta
-									// de
-									// destino
-									// do
-									// arquivo
-									// .
-									arquivosSemPasta, // Nome do arquivo.
-									"/teste_pasta_reindex/Nao_Indexados_TESTE" // Pasta
-							// de
-							// origem
-							// do
-							// arquivo
-							// .
-							));
-					documentumRepository.ConsultarQueryUPDATE(Querys
-							.UPDATE_UNLINK(
-									"/teste_pasta_reindex/Nao_Indexados_TESTE", // Pasta
-									// de
-									// origem
-									// do
-									// arquivo
-									// .
-									arquivosSemPasta // Nome do arquivo.
-							));
-					documentumRepository.ConsultarQueryUPDATE(Querys // Apagando
-							// o
-							// objeto
-							// de
-							// cocntrole
-							// da
-							// pasta
-							// de 60
-							// dias.
-							.DELETE(arquivosNaoIndexadosMais60.get(0)));
-				}
-			}
-
-			/*
-			 * Criação do objeto de controle, inicialmente na pasta de 30 dias.
-			 */
-			if (arquivosNaoIndexadosMenos30.isEmpty()
-					&& arquivosNaoIndexadosMais60.isEmpty()) {
-				documentumRepository.createPasta30(arquivosSemPasta,
-						"date_nao_indexado_30", "", "",
-						"/teste_pasta_reindex/Menos30");
-			}
-		} catch (Exception e) {
-			System.err.println("Erro no controle do tempo de vida do arquivo.");
-			e.printStackTrace();
-		}
-
-	}
-	
-	public void controleDePastas2(String arquivosSemPasta) {
+	public void controleDeRegras(DocumentumReindexacao arquivosSemPasta) {
 		// Registro JOAO depende do web service = false ----
 
 		/*
@@ -395,24 +153,22 @@ public class Reindexacao {
 		 * seja encontrado é criado o registro na pasta de
 		 */
 		try {
-			System.out.println("------ARQUIVO SEM PASTA------"+ arquivosSemPasta);
-			ArrayList<String> arrayRegistroNome = this.documentumRepository.ConsultarQuery(Querys.selectTabelaRegistroNomeEspecifico(arquivosSemPasta));
-			System.out.println("------SELECT DO NOME------"+ arrayRegistroNome.get(0));
-			int diasProcessado = util.diasProcessados(arrayRegistroNome.get(0).toString());
-			System.out.println("------DIAS PROCESSADOS------"+ diasProcessado);
+			System.out.println("------ARQUIVo: " + arquivosSemPasta.getNome() + "------");
+			ArrayList<String> arrayRegistroNome = this.documentumRepository.ConsultarQuery(Querys.selectTabelaRegistroNomeEspecifico(arquivosSemPasta.getNome()));
+			System.out.println("------SELECT DO NOME: " + arrayRegistroNome.get(0)+ "------");
+			int diasProcessado = Utils.diasProcessados(arrayRegistroNome.get(0).toString());
+			System.out.println("------DIAS PROCESSADOS: " + diasProcessado + "------");
 			
 				
-				if (diasProcessado >= 31) {
-					//documentumRepository.ConsultarQueryUPDATE(Querys.DELETE(arquivosNaoIndexadosMenos30.get(0)));
-					//documentumRepository.createPasta60(arquivosSemPasta,"date_nao_indexado_60", "", "","/teste_pasta_reindex/Mais60",arquivosNaoIndexadosMenos30.get(2).split(" ")[0]);
-					//documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/PastaRegra", arquivosSemPasta, "/teste_pasta_reindex/Nao_Indexados_TESTE" ));
+				if (diasProcessado >= 5) {
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK_ID("/teste_pasta_reindex/Regras" ,arquivosSemPasta.getNome(),"/teste_pasta_reindex/Nao_Indexados_TESTE"));
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_ID("/teste_pasta_reindex/Nao_Indexados_TESTE",arquivosSemPasta.getNome()));
 				}
 				
-				if (diasProcessado >= 61) {
-					//documentumRepository.ConsultarQueryUPDATE(Querys.DELETE(arquivosNaoIndexadosMenos30.get(0)));
-					//documentumRepository.createPasta60(arquivosSemPasta,"date_nao_indexado_60", "", "","/teste_pasta_reindex/Mais60",arquivosNaoIndexadosMenos30.get(2).split(" ")[0]);
-					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK("/teste_pasta_reindex/PastaRegra", arquivosSemPasta, "/teste_pasta_reindex/Nao_Indexados_TESTE" ));
-					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK( "/teste_pasta_reindex/Nao_Indexados_TESTE", arquivosSemPasta));
+				if (diasProcessado >= 10) {
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_LINK_ID("/teste_pasta_reindex/Expurgo" ,arquivosSemPasta.getId(),"/teste_pasta_reindex/Regras"));
+					documentumRepository.ConsultarQueryUPDATE(Querys.UPDATE_UNLINK_ID("/teste_pasta_reindex/Regras",arquivosSemPasta.getId()));
+					documentumRepository.ConsultarQueryUPDATE(Querys.deleteValorTabelaRegistrada(arquivosSemPasta.getId()));
 				}
 			
 		} catch (Exception e) {
@@ -436,37 +192,47 @@ public class Reindexacao {
 		// BATE NO WM
 
 		Map<String, String> listRetornoWD = new HashMap<String, String>();
+		System.out.println(sinistro);
 
 	
-		if (sinistro.equals("301182000093177")) {
+		if (sinistro.equals("3021720000331")) {
 			// RETORNO DA WM A VARIAVEL "wsdl" FOR TRUE
 			String sinsitro;
 			String expediente;
 
-			sinsitro = "S301182000093177";
+			sinsitro = "S3021720000331";
 			expediente = "TRC03";
 
 			listRetornoWD.put("sinistro", new String(sinsitro));
 			listRetornoWD.put("expediente", new String(expediente));
 			listRetornoWD.put("reindexa", new String("sim"));
 
-		} else if(sinistro.equals("2021720000331")) {
+		} else if(sinistro.equals("3031720000333")) {
 			
 			// RETORNO DA WM A VARIAVEL "wsdl" FOR TRUE
 			String sinsitro;
 			String expediente;
 
-			sinsitro = "S2021720000331";
+			sinsitro = "S3031720000333";
 			expediente = "TRC03";
 
 			listRetornoWD.put("sinistro", new String(sinsitro));
 			listRetornoWD.put("expediente", new String(expediente));
 			listRetornoWD.put("reindexa", new String("sim"));
 			
-		}
-		
-		
-		else {
+		}else if(sinistro.equals("3021730000344")) {
+			
+			// RETORNO DA WM A VARIAVEL "wsdl" FOR TRUE
+			String sinsitro;
+			String expediente;
+
+			sinsitro = "S3021730000344";
+			expediente = "TRC03";
+
+			listRetornoWD.put("sinistro", new String(sinsitro));
+			listRetornoWD.put("expediente", new String(expediente));
+			listRetornoWD.put("reindexa", new String("sim"));
+		} else {
 			listRetornoWD.put("reindexa", new String("nao"));
 		}
 
@@ -486,12 +252,10 @@ public class Reindexacao {
 		for (String key : retornoWMLista.keySet()) {
 
 			if (key.equals(("sinistro"))) {
-				if (documentumRepository.validaPastaSinistro(retornoWMLista
-						.get(key))) {
+				if (documentumRepository.validaPastaSinistro(retornoWMLista.get(key))) {
 
-					if (documentumRepository
-							.validaPastaExpediente(retornoWMLista.get(key))) {
-
+					if (documentumRepository.validaPastaExpediente(retornoWMLista.get(key))) {
+						System.out.println();
 					} else {
 
 						String nomeFolder = retornoWMLista.get("expediente");
@@ -506,14 +270,20 @@ public class Reindexacao {
 					String nomeFolderSinistro = retornoWMLista.get(key);
 					String pathFolderCabinet = "/teste_pasta_reindex";
 
-					documentumRepository.criarPasta(nomeFolderSinistro,
-							pathFolderCabinet);
+					documentumRepository.criarPasta(nomeFolderSinistro,pathFolderCabinet);
 
 					String nomeFolder = retornoWMLista.get("expediente");
 					String pathFolder = "/teste_pasta_reindex/"
 							+ retornoWMLista.get("sinistro");
 
 					documentumRepository.criarPasta(nomeFolder, pathFolder);
+					
+					if (documentumRepository.validaPastaSinistro(retornoWMLista.get("expediente"))) {
+
+						if (documentumRepository.validaPastaExpediente(retornoWMLista.get("sinistro"))) {
+							System.out.println("Pasta criada com sucesso.");
+						}
+					}
 
 				}
 
